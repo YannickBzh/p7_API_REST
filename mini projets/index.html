@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="people-card" style="text-align:center;margin-top:5%;">
+
+    </div>
+    <script>
+        const $peopleCard = document.querySelector('#people-card');
+
+        function displayName(name) {
+            const title = document.createElement('h1');
+            title.textContent = name;
+            $peopleCard.appendChild(title);
+        }
+
+        function displayPicture(source) {
+            const picture = document.createElement('img');
+            picture.setAttribute('src', source);
+            $peopleCard.appendChild(picture);
+        }
+        
+        fetch('https://randomuser.me/api/')
+            .then(function(res) {
+                return res.json();
+            })
+            .then(data => data.results[0])
+            .then(people => {
+                const firstName = people.name.first;
+                const thumbnail = people.picture.large;
+                displayName(firstName);
+                displayPicture(thumbnail);
+            })
+            .catch(function() {
+                console.log('Problème');
+            })
+
+    </script>
+</body>
+</html>
