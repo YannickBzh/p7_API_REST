@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <div id="people-card" style="text-align:center;margin-top:5%;">
 
@@ -23,10 +25,11 @@
             picture.setAttribute('src', source);
             $peopleCard.appendChild(picture);
         }
-        
+
         fetch('https://randomuser.me/api/')
-            .then(function(res) {
+            .then(function (res) {
                 return res.json();
+
             })
             .then(data => data.results[0])
             .then(people => {
@@ -35,10 +38,11 @@
                 displayName(firstName);
                 displayPicture(thumbnail);
             })
-            .catch(function() {
+            .catch(function () {
                 console.log('Problème');
             })
 
     </script>
 </body>
+
 </html>

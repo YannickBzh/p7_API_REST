@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="people-card" style="text-align:center;margin-top:5%;">
+
+    </div>
+    <script>
+        const $peopleCard = document.querySelector('#people-card');
+
+        function displayWeather(type) {
+            const title = document.createElement('h1');
+            title.textContent = type;
+            $peopleCard.appendChild(title);
+        }
+
+        function displayVisibility(subName) {
+            const subTitle = document.createElement('h2');
+            subTitle.textContent = subName;
+            $peopleCard.appendChild(subTitle);
+        }
+        
+        fetch('https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/72f517796fa29376db2efd0c989412cf/37.8267,-122.4233')
+            .then(function(res) {
+                return res.json();
+            })
+            .then(weather => {
+                const whatWeather = weather.currently.summary;
+                const visibility = weather.currently.visibility;
+                displayWeather(whatWeather);
+                displayVisibility(visibility);
+            })
+            .catch(function() {
+                console.log('Problème');
+            })
+
+    </script>
+</body>
+</html>
