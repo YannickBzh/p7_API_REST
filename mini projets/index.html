@@ -31,7 +31,10 @@
                 return res.json();
 
             })
-            .then(data => data.results[0])
+            .then(data => {
+                console.log(data.results)
+                return data.results[0]
+            })
             .then(people => {
                 const firstName = people.name.first;
                 const thumbnail = people.picture.large;
