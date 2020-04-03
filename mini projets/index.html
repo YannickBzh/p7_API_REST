@@ -14,6 +14,17 @@
     <script>
         const $peopleCard = document.querySelector('#people-card');
 
+        navigator.geolocation.getCurrentPosition(function(position) {
+            alert("Message à afficher");
+            console.log(position)
+        });
+        
+        if ("geolocation" in navigator) {
+            console.log("ok")
+        } else {    
+            console.log("pas ok")
+        }
+
         function displayName(name) {
             const title = document.createElement('h1');
             title.textContent = name;
