@@ -1,0 +1,87 @@
+[
+    {
+        "id": 1,
+        "restaurantName": "Masaniello",
+        "address": "39 Rue des Petites Écuries, 75010 Paris",
+        "lat": 44.839191,
+        "long": -0.571334,
+        "ratings": [
+            {
+                "stars": 4,
+                "comment": "Un excellent restaurant, j'y reviendrai ! Par contre il vaut mieux aimer la viande."
+            },
+            {
+                "stars": 5,
+                "comment": "Tout simplement mon restaurant préféré !"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "restaurantName": "Mangez-moi",
+        "address": "4 Rue Lamarck, 75018 Paris",
+        "lat": 44.834182,
+        "long": -0.573081,
+        "ratings": [
+            {
+                "stars": 5,
+                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+            },
+            {
+                "stars": 3,
+                "comment": "J'ai trouvé ça correct, sans plus"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "restaurantName": "Mama Shelter",
+        "address": "4 Rue Lamarck, 75018 Paris",
+        "lat": 44.839982,
+        "long": -0.577416,
+        "ratings": [
+            {
+                "stars": 5,
+                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+            },
+            {
+                "stars": 3,
+                "comment": "J'ai trouvé ça correct, sans plus"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "restaurantName": "La brasserie Bordelaise",
+        "address": "4 Rue Lamarck, 75018 Paris",
+        "lat": 44.841245,
+        "long": -0.573056,
+        "ratings": [
+            {
+                "stars": 5,
+                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+            },
+            {
+                "stars": 3,
+                "comment": "J'ai trouvé ça correct, sans plus"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "restaurantName": "Le Quatrième Mur",
+        "address": "4 Rue Lamarck, 75018 Paris",
+        "lat": 44.842738,
+        "long": -0.574087,
+        "ratings": [
+            {
+                "stars": 5,
+                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+            },
+            {
+                "stars": 3,
+                "comment": "J'ai trouvé ça correct, sans plus"
+            }
+        ]
+    }
+]
