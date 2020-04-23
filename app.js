@@ -8,6 +8,31 @@ let restaurants = [
     ['Le Quatrième Mur', 44.842738, -0.574087, 1]
 ];
 
+
+// AFFICHE LES MARKERS DES RESTAURANTS
+function setMarkers(map) {
+    let shape = {
+        coords: [1, 1, 1, 20, 18, 20, 18, 1],
+        type: 'poly'
+    };
+    for (let i = 0; i < restaurants.length; i++) {
+        let restaurant = restaurants[i];
+        let marker = new google.maps.Marker({
+            position: { lat: restaurant[1], lng: restaurant[2] },
+            map: map,
+            shape: shape,
+            title: restaurant[0],
+            zIndex: restaurant[3]
+        });
+        marker.addListener('click', function() {
+            console.log(restaurants[1])
+            console.log(marker.title)
+          });
+    }
+    
+}
+
+
 // APPEL DE LA MAP
 let map, infoWindow;
 function initMap() {
@@ -15,7 +40,7 @@ function initMap() {
         center: { lat: 44.8333, lng: -0.5667 },
         zoom: 14
     });
-    setMarkers(map);
+    
     infoWindow = new google.maps.InfoWindow;
 
     // GEOLOCALISATION
@@ -48,35 +73,23 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 
 
-// fetch('/resto.json')
-//     .then(function (res) {
-//         return res.json();
-//     })
-//     .then(resto => {
-//         const whichRestos = resto.restaurantName;
-
-//         console.log(whichRestos)
-
-//     })
-//     .catch(function () {
-//         console.log('Problème');
-//     })
 
 
-// AFFICHE LES MARKERS DES RESTAURANTS
-function setMarkers(map) {
-    let shape = {
-        coords: [1, 1, 1, 20, 18, 20, 18, 1],
-        type: 'poly'
-    };
-    for (let i = 0; i < restaurants.length; i++) {
-        let restaurant = restaurants[i];
-        let marker = new google.maps.Marker({
-            position: { lat: restaurant[1], lng: restaurant[2] },
-            map: map,
-            shape: shape,
-            title: restaurant[0],
-            zIndex: restaurant[3]
-        });
-    }
-}
+fetch('public/restos.json', {mode: 'no-cors'})
+    .then(function (res) {
+        return res.json();
+    })
+    .then(restos => {
+        
+        for (let i = 0; i < restos.length; i++) {
+            //let restoNames = restos[i].restaurantName
+            let resto1Ratings = restos[0].ratings
+            
+            console.log(resto1Ratings)
+        }
+        setMarkers(map);
+    })
+    .catch(function () {
+        console.log('Problème');
+    })
+
