@@ -2,85 +2,85 @@
     {
         "id": 1,
         "restaurantName": "Masaniello",
-        "address": "39 Rue des Petites Écuries, 75010 Paris",
+        "address": "10 Rue Maucoudinat, 33000 Bordeaux",
         "lat": 44.839191,
         "long": -0.571334,
         "ratings": [
             {
-                "stars": 4,
-                "comment": "Un excellent restaurant, j'y reviendrai ! Par contre il vaut mieux aimer la viande."
+                "stars": 5,
+                "comment": "Pizzeria extraordinaire !!! Pizza super bonnes, et personnel extrêmement gentil et sympathique. Malgré le prix de certaines pizza pouvant aller jusqu’à 18€ !!! Mais sinon la qualité est au rendez-vous. Un conseil, si vous hésitez manger ici, FONCEZ"
             },
             {
-                "stars": 5,
-                "comment": "Tout simplement mon restaurant préféré !"
+                "stars": 4,
+                "comment": "C'est un restaurant où on se sent en Italie, surtout à Naples, avec ses bonnes pizzas parsemées de vrais fromages italiens. Le personnel est accueillant et à l'écoute. Seul bémol sur la cuisson des calzones en fritto, un peu blanchâtre ! Je recommande volontier ce lieu."
             }
         ]
     },
     {
         "id": 2,
         "restaurantName": "Mangez-moi",
-        "address": "4 Rue Lamarck, 75018 Paris",
+        "address": "33 Rue du Loup, 33000 Bordeaux",
         "lat": 44.834182,
         "long": -0.573081,
         "ratings": [
             {
                 "stars": 5,
-                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+                "comment": "Le meilleur kebap du monde! (Vraiment!)"
             },
             {
                 "stars": 3,
-                "comment": "J'ai trouvé ça correct, sans plus"
+                "comment": "J'adore le kebab en lui-même bien que conscient de sa qualité moyenne. Le nan au fromage fait la différence ici, pour le reste du grand classique. Accueil et amabilité très moyens. Je recommande tout de même" 
             }
         ]
     },
     {
         "id": 3,
         "restaurantName": "Mama Shelter",
-        "address": "4 Rue Lamarck, 75018 Paris",
+        "address": "19 Rue Poquelin Molière, 33000 Bordeaux",
         "lat": 44.839982,
         "long": -0.577416,
         "ratings": [
             {
                 "stars": 5,
-                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+                "comment": "Chambre sympa, accueil bien, et surtout super brunch le dimanche."
             },
             {
                 "stars": 3,
-                "comment": "J'ai trouvé ça correct, sans plus"
+                "comment": "Ça a plus l'air d'un bar à escortes qu'autre chose, menu restreint qui se veut de qualité mais qui reste très moyen"
             }
         ]
     },
     {
         "id": 4,
         "restaurantName": "La brasserie Bordelaise",
-        "address": "4 Rue Lamarck, 75018 Paris",
+        "address": "50 Rue Saint-Rémi, 33000 Bordeaux",
         "lat": 44.841245,
         "long": -0.573056,
         "ratings": [
             {
                 "stars": 5,
-                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+                "comment": "Très bonne expérience à la Brasserie Bordelaise, un lieu convivial et chaleureux. On y trouve une cuisine franche, authentique et honnête à partir de produits régionaux."
             },
             {
-                "stars": 3,
-                "comment": "J'ai trouvé ça correct, sans plus"
+                "stars": 2,
+                "comment": "Une usine à touriste. Plat et service de médiocre qualité. Avec mon mari nous avons été très déçu car le nom et les commentaires étaient prometteurs."
             }
         ]
     },
     {
         "id": 5,
         "restaurantName": "Le Quatrième Mur",
-        "address": "4 Rue Lamarck, 75018 Paris",
+        "address": "2 Place de la Comédie, 33000 Bordeaux",
         "lat": 44.842738,
         "long": -0.574087,
         "ratings": [
             {
                 "stars": 5,
-                "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+                "comment": "Le cadre est super, la cuisine goûteuse et délicieuse le velouté de champignons de Paris à tomber par terre !"
             },
             {
                 "stars": 3,
-                "comment": "J'ai trouvé ça correct, sans plus"
+                "comment": "Quelle déception, ce chef qui donne des leçons dans ses émissions, ferait mieux de regarder dans ses propres assiettes. Plats sans saveur, desserts insipides, service oppressant....a déconseiller !"
             }
         ]
     }

@@ -1,35 +1,24 @@
 
-// STOCKE LES RESTAURANTS DANS UNE VARIABLE
-let restaurants = [
-    ['Masaniello', 44.839191, -0.571334, 4],
-    ['Mangez-moi', 44.834182, -0.573081, 5],
-    ['Mama Shelter', 44.839982, -0.577416, 3],
-    ['La brasserie Bordelaise', 44.841245, -0.573056, 2],
-    ['Le Quatrième Mur', 44.842738, -0.574087, 1]
-];
-
-
 // AFFICHE LES MARKERS DES RESTAURANTS
-function setMarkers(map) {
+function setMarkers(map, data) {
     let shape = {
         coords: [1, 1, 1, 20, 18, 20, 18, 1],
         type: 'poly'
     };
-    for (let i = 0; i < restaurants.length; i++) {
-        let restaurant = restaurants[i];
+
+    for (let i = 0; i < data.length; i++) {
+        let restaurant = data[i];
         let marker = new google.maps.Marker({
-            position: { lat: restaurant[1], lng: restaurant[2] },
+            position: { lat: restaurant.lat, lng: restaurant.long },
             map: map,
             shape: shape,
-            title: restaurant[0],
-            zIndex: restaurant[3]
+            title: restaurant.restaurantName
         });
         marker.addListener('click', function() {
-            console.log(restaurants[1])
-            console.log(marker.title)
+            let ratings = restaurant.ratings[0].comment;
+            document.getElementById('displayRatings').innerHTML = ratings;
           });
     }
-    
 }
 
 
@@ -73,23 +62,13 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 
 
-
-
 fetch('public/restos.json', {mode: 'no-cors'})
     .then(function (res) {
         return res.json();
     })
     .then(restos => {
-        
-        for (let i = 0; i < restos.length; i++) {
-            //let restoNames = restos[i].restaurantName
-            let resto1Ratings = restos[0].ratings
-            
-            console.log(resto1Ratings)
-        }
-        setMarkers(map);
+        setMarkers(map, restos);
     })
     .catch(function () {
         console.log('Problème');
     })
-
