@@ -7,6 +7,7 @@ body, html {
 #yg-leftArea {
     width: auto;
     height: 790px;
+    margin-top:2%;
 }
 
 #map {
@@ -18,6 +19,7 @@ body, html {
 .col-md-9 {
     padding:0 !important;
 }
+
 
 /* .displayRatings {
     height:100px;
