@@ -19,12 +19,11 @@ function setMarkers(map, data) {
             let ratingsA = restaurant.ratings[0].comment;
             let ratingsB = restaurant.ratings[1].comment;
             let paragrapheA = document.createElement("p");
-            let paragrapheB = document.createElement("p");
             document.getElementById('displayRatings').innerHTML = restaurantName;
-            document.getElementById('displayRatings').appendChild(paragrapheA);
+            document.getElementById('displayRatings').appendChild(paragraphe);
             paragrapheA.textContent = ratingsA;
-            document.getElementById('displayRatings').appendChild(paragrapheB);
-            paragrapheB.textContent = ratingsB;
+            document.getElementById('displayRatings').appendChild(paragraphe);
+            paragrapheA.textContent = ratingsB;
           });
     }
 }
