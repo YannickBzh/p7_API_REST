@@ -69,14 +69,21 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
+function fetchData() {
+    return fetch('public/restos.json', {mode: 'no-cors'})
+        .then(function (res) {
+            return res.json();
+        })
+        .then(restos => {
+            setMarkers(map, restos);
+        })
+        .catch(function (err) {
+            console.log('Problème');
+            console.log(err);
+    })
+}
 
-fetch('public/restos.json', {mode: 'no-cors'})
-    .then(function (res) {
-        return res.json();
-    })
-    .then(restos => {
-        setMarkers(map, restos);
-    })
-    .catch(function () {
-        console.log('Problème');
-    })
+
+$(document).ready(function() {
+    fetchData()
+})
