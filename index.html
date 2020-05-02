@@ -17,15 +17,36 @@
     <div class="container-fluid">
         <div class="row">
             <div id="yg-leftArea" class="col-md-3">
-                <div><span id="displayRatings"></span></div>
+                <div>
+                    <span id="displayRatings"></span>
+                </div>
             </div>
             <div class="col-md-9">
                 <div id="map"></div>
             </div>
         </div>
+
+        <div class="modal d-none" id="modalRate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content shadow">
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title">Tell us more !
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-row justify-content-around">
+                            <div>I rate the restaurant</span></div>
+                        </div>
+                        <div class="modal-footer justify-content-center mt-3">
+                            <button type="button" class="btn btn-primary attack">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-    <script src="./include/jquery-3.5.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
     <script src="./app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA&callback=initMap"
         async defer></script>
