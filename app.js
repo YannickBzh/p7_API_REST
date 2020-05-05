@@ -27,9 +27,15 @@ function setMarkers(map, data) {
             paragrapheB.textContent = ratingsB;
             $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
             btnClick()
+            $('.msg_form').on('click', $('#saveBtn'), function() {
+                let msg = $(this).find('#review').val();
+                console.log(msg);
+              });
+            closeModal()
         });
     }
 }
+
 
 
 function btnClick() {
@@ -92,6 +98,20 @@ function fetchData() {
             console.log(err);
         })
 }
+
+// Close button modal
+
+function closeModal() {
+    $('#closeModal').click(function () {
+        $('#modalRate').addClass('d-none').removeClass('d-block');
+    })
+}
+
+
+// Session storage
+
+
+
 
 
 $(document).ready(function () {
