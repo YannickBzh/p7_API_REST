@@ -20,6 +20,8 @@ function setMarkers(map, data) {
             let ratingsB = restaurant.ratings[1].comment;
             let paragrapheA = document.createElement("p");
             let paragrapheB = document.createElement("p");
+            let cleanArea = $('#review')
+            let silence = ""
             $('#displayRatings').html(restaurantName);
             $('#displayRatings').append(paragrapheA);
             paragrapheA.textContent = ratingsA;
@@ -30,12 +32,12 @@ function setMarkers(map, data) {
             $('.msg_form').on('click', $('#saveBtn'), function() {
                 let msg = $(this).find('#review').val();
                 console.log(msg);
+                $('#review').val("")
               });
             closeModal()
         });
     }
 }
-
 
 
 function btnClick() {
@@ -106,13 +108,6 @@ function closeModal() {
         $('#modalRate').addClass('d-none').removeClass('d-block');
     })
 }
-
-
-// Session storage
-
-
-
-
 
 $(document).ready(function () {
     fetchData()
