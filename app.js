@@ -29,21 +29,27 @@ function setMarkers(map, data) {
             paragrapheB.textContent = ratingsB;
             $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
             btnClick()
-            $('.msg_form').on('click', $('#saveBtn'), function() {
-                let msg = $(this).find('#review').val();
-                console.log(msg);
-                $('#review').val("")
-              });
+            submitRate()
             closeModal()
         });
     }
 }
 
 
+// OPEN MODAL
 function btnClick() {
     $('#btnRate').click(function () {
         $('#modalRate').addClass('d-block').removeClass('d-none');
     })
+}
+
+// LOG RATINGS WHEN SUBMIT BUTTON IS CLICKED
+function submitRate() {
+    $('.msg_form').on('click', $('#saveBtn'), function () {
+        let msg = $(this).find('#review').val();
+        console.log(msg);
+        $('#review').val("")
+    });
 }
 
 
