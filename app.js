@@ -35,7 +35,6 @@ function setMarkers(map, data) {
     }
 }
 
-
 // OPEN MODAL
 function btnClick() {
     $('#btnRate').click(function () {
@@ -45,10 +44,10 @@ function btnClick() {
 
 // LOG RATINGS WHEN SUBMIT BUTTON IS CLICKED
 function submitRate() {
-    $('.msg_form').on('click', $('#saveBtn'), function () {
-        let msg = $(this).find('#review').val();
-        console.log(msg);
-        $('#review').val("")
+    $('#saveBtn').on('click', function () {
+        let msg = $('#review').val();
+        console.log(msg);   
+        $('#review').val("");
     });
 }
 
