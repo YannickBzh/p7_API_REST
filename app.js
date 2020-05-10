@@ -15,25 +15,71 @@ function setMarkers(map, data) {
             title: restaurant.restaurantName
         });
         marker.addListener('click', function () {
+            console.log(restaurant.ratings);
             let restaurantName = restaurant.restaurantName;
             let ratingsA = restaurant.ratings[0].comment;
             let ratingsB = restaurant.ratings[1].comment;
+            let ratingsC = restaurant.ratings[2];
             let paragrapheA = document.createElement("p");
             let paragrapheB = document.createElement("p");
-            let cleanArea = $('#review')
-            let silence = ""
+            let paragrapheC = document.createElement("p");
             $('#displayRatings').html(restaurantName);
             $('#displayRatings').append(paragrapheA);
             paragrapheA.textContent = ratingsA;
             $('#displayRatings').append(paragrapheB);
             paragrapheB.textContent = ratingsB;
+            $('#displayRatings').append(paragrapheC);
+            paragrapheC.textContent = "";
             $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
             btnClick()
-            submitRate()
+
+            if (typeof ratingsC === 'undefined') {
+                let ratingsC = ""
+                paragrapheC.textContent = ratingsC
+            } else {
+                let ratingsC = restaurant.ratings[2].comment
+                paragrapheC.textContent = ratingsC
+            }
+
+            $('#saveRateBtn').on('click', function () {
+                let newRate = {
+                    "comment": $('#review').val()
+                };
+                restaurant.ratings.push(newRate);
+                sessionStorage.setItem("ratings", newRate);
+                sessionStorage.getItem("ratings");
+                let ratingsC = restaurant.ratings[2].comment
+                paragrapheC.textContent = ratingsC;
+                
+                console.log(restaurant.ratings);
+            });
+            $('#review').val("");
             closeModal()
         });
     }
 }
+
+
+// function saveToSessionStorage(newData) {
+//     
+//         let restaurantUpdate = NewData
+//         let newRate = {
+//             "comment": $('#review').val()
+//         };
+//         restaurantUpdate.ratings.push(newRate);
+//         let ratingsC = $('#review').val();
+//         paragrapheC.textContent = ratingsC;
+//         sessionStorage.setItem("ratings", newRate);
+//         sessionStorage.getItem("ratings");
+//         console.log(restaurantUpdate.ratings);
+//     }
+// 
+
+// function submitRate() {
+//     $('#saveBtn').on('click', function () {
+//         saveToSessionStorage(newData)
+//     });
+// }
 
 
 // OPEN MODAL
@@ -41,15 +87,6 @@ function btnClick() {
     $('#btnRate').click(function () {
         $('#modalRate').addClass('d-block').removeClass('d-none');
     })
-}
-
-// LOG RATINGS WHEN SUBMIT BUTTON IS CLICKED
-function submitRate() {
-    $('.msg_form').on('click', $('#saveBtn'), function () {
-        let msg = $(this).find('#review').val();
-        console.log(msg);
-        $('#review').val("")
-    });
 }
 
 
@@ -101,6 +138,9 @@ function fetchData() {
         .then(restos => {
             setMarkers(map, restos);
         })
+        // .then(restos => {
+        //     saveToSessionStorage(restos);
+        // })
         .catch(function (err) {
             console.log('Problème');
             console.log(err);
