@@ -1,4 +1,3 @@
-
 // AFFICHE LES MARKERS DES RESTAURANTS
 function setMarkers(map, data) {
     let shape = {
@@ -16,6 +15,7 @@ function setMarkers(map, data) {
         });
         marker.addListener('click', function () {
             console.log(restaurant.ratings);
+            
             let restaurantName = restaurant.restaurantName;
             let ratingsA = restaurant.ratings[0].comment;
             let ratingsB = restaurant.ratings[1].comment;
@@ -32,27 +32,22 @@ function setMarkers(map, data) {
             paragrapheC.textContent = "";
             $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
             btnClick()
-
-            if (typeof ratingsC === 'undefined') {
-                let ratingsC = ""
-                paragrapheC.textContent = ratingsC
-            } else {
-                let ratingsC = restaurant.ratings[2].comment
-                paragrapheC.textContent = ratingsC
-            }
-
+        
             $('#saveRateBtn').on('click', function () {
+                
                 let newRate = {
                     "comment": $('#review').val()
                 };
+                
                 restaurant.ratings.push(newRate);
-                sessionStorage.setItem("ratings", newRate);
-                sessionStorage.getItem("ratings");
+                // sessionStorage.setItem("ratings", newRate);
+                // sessionStorage.getItem("ratings");
                 let ratingsC = restaurant.ratings[2].comment
                 paragrapheC.textContent = ratingsC;
-                
+                $('#modalRate').addClass('d-none').removeClass('d-block');
                 console.log(restaurant.ratings);
             });
+            
             $('#review').val("");
             closeModal()
         });
