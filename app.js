@@ -19,7 +19,6 @@ function setMarkers(map, data) {
             let restaurantName = restaurant.restaurantName;
             let ratingsA = restaurant.ratings[0].comment;
             let ratingsB = restaurant.ratings[1].comment;
-            let ratingsC = restaurant.ratings[2];
             let paragrapheA = document.createElement("p");
             let paragrapheB = document.createElement("p");
             let paragrapheC = document.createElement("p");
@@ -29,7 +28,6 @@ function setMarkers(map, data) {
             $('#displayRatings').append(paragrapheB);
             paragrapheB.textContent = ratingsB;
             $('#displayRatings').append(paragrapheC);
-            paragrapheC.textContent = "";
             $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
             btnClick()
         
