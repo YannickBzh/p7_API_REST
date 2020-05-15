@@ -1,9 +1,13 @@
+let restaurants
+
 // AFFICHE LES MARKERS DES RESTAURANTS
 function setMarkers(map, data) {
     let shape = {
         coords: [1, 1, 1, 20, 18, 20, 18, 1],
         type: 'poly'
     };
+
+    restaurants = data
 
     for (let i = 0; i < data.length; i++) {
         let restaurant = data[i];
@@ -14,72 +18,64 @@ function setMarkers(map, data) {
             title: restaurant.restaurantName
         });
         marker.addListener('click', function () {
-            console.log(restaurant.ratings);
-            
-            let restaurantName = restaurant.restaurantName;
-            let ratingsA = restaurant.ratings[0].comment;
-            let ratingsB = restaurant.ratings[1].comment;
-            let paragrapheA = document.createElement("p");
-            let paragrapheB = document.createElement("p");
-            let paragrapheC = document.createElement("p");
-            $('#displayRatings').html(restaurantName);
-            $('#displayRatings').append(paragrapheA);
-            paragrapheA.textContent = ratingsA;
-            $('#displayRatings').append(paragrapheB);
-            paragrapheB.textContent = ratingsB;
-            $('#displayRatings').append(paragrapheC);
-            $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
-            btnClick()
-        
-            $('#saveRateBtn').on('click', function () {
-                
-                let newRate = {
-                    "comment": $('#review').val()
-                };
-                
-                restaurant.ratings.push(newRate);
-                // sessionStorage.setItem("ratings", newRate);
-                // sessionStorage.getItem("ratings");
-                let ratingsC = restaurant.ratings[2].comment
-                paragrapheC.textContent = ratingsC;
-                $('#modalRate').addClass('d-none').removeClass('d-block');
-                console.log(restaurant.ratings);
-            });
-            
-            $('#review').val("");
-            closeModal()
+            // console.log(restaurant.ratings);
+
+            // console.log($(this)[0].title)
+            onSelectRestaurant(restaurant)
+            // data.re            
+
+
+            // let restaurantName = restaurant.restaurantName;
+            // let ratingsA = restaurant.ratings[0].comment;
+            // let ratingsB = restaurant.ratings[1].comment;
+            // let paragrapheA = document.createElement("p");
+            // let paragrapheB = document.createElement("p");
+            // let paragrapheC = document.createElement("p");
+            // $('#displayRatings').html(restaurantName);
+            // $('#displayRatings').append(paragrapheA);
+            // paragrapheA.textContent = ratingsA;
+            // $('#displayRatings').append(paragrapheB);
+            // paragrapheB.textContent = ratingsB;
+            // $('#displayRatings').append(paragrapheC);
+            // $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
+
+            // $('#saveRateBtn').on('click', function () {
+
+
+            //     // restaurant.ratings.push(newRate);
+            //     // // sessionStorage.setItem("ratings", newRate);
+            //     // // sessionStorage.getItem("ratings");
+            //     // let ratingsC = restaurant.ratings[2].comment
+            //     // paragrapheC.textContent = ratingsC;
+            //     // $('#modalRate').addClass('d-none').removeClass('d-block');
+            //     // console.log(restaurant.ratings);
+            // });
+
+            // $('#review').val("");
+            // closeModal()
         });
     }
 }
 
+function onSelectRestaurant(restaurant) {
+    console.log("====")
+    console.log(restaurant)
+    const $restaurantName = $('.restaurant-name')
+    $restaurantName.text(restaurant.restaurantName)
+}
 
-// function saveToSessionStorage(newData) {
-//     
-//         let restaurantUpdate = NewData
-//         let newRate = {
-//             "comment": $('#review').val()
-//         };
-//         restaurantUpdate.ratings.push(newRate);
-//         let ratingsC = $('#review').val();
-//         paragrapheC.textContent = ratingsC;
-//         sessionStorage.setItem("ratings", newRate);
-//         sessionStorage.getItem("ratings");
-//         console.log(restaurantUpdate.ratings);
-//     }
-// 
+function onRateRestaurant() {
+    const restaurantName = $('.restaurant-name').text()
+    const selectedRestaurant = restaurants.filter(resto => resto.restaurantName === restaurantName)[0]
 
-// function submitRate() {
-//     $('#saveBtn').on('click', function () {
-//         saveToSessionStorage(newData)
-//     });
-// }
+    const newRating = {
+        stars: 2,
+        comment: "C'est de la balle!!"
+    }
 
+    selectedRestaurant.ratings.push(newRating)
 
-// OPEN MODAL
-function btnClick() {
-    $('#btnRate').click(function () {
-        $('#modalRate').addClass('d-block').removeClass('d-none');
-    })
+    console.log(selectedRestaurant.ratings)
 }
 
 
@@ -140,13 +136,17 @@ function fetchData() {
         })
 }
 
-// Close button modal
+$('#closeModal').click(function () {
+    $('#modalRate').addClass('d-none').removeClass('d-block');
+})
 
-function closeModal() {
-    $('#closeModal').click(function () {
-        $('#modalRate').addClass('d-none').removeClass('d-block');
-    })
-}
+$('#btnRate').click(function () {
+    $('#modalRate').addClass('d-block').removeClass('d-none');
+})
+
+$('#saveRateBtn').click(function () {
+    onRateRestaurant()
+})
 
 $(document).ready(function () {
     fetchData()
