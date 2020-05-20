@@ -18,54 +18,22 @@ function setMarkers(map, data) {
             title: restaurant.restaurantName
         });
         marker.addListener('click', function () {
-            // console.log(restaurant.ratings);
-
-            // console.log($(this)[0].title)
             onSelectRestaurant(restaurant)
-            // data.re            
-
-
-            // let restaurantName = restaurant.restaurantName;
-            // let ratingsA = restaurant.ratings[0].comment;
-            // let ratingsB = restaurant.ratings[1].comment;
-            // let paragrapheA = document.createElement("p");
-            // let paragrapheB = document.createElement("p");
-            // let paragrapheC = document.createElement("p");
-            // $('#displayRatings').html(restaurantName);
-            // $('#displayRatings').append(paragrapheA);
-            // paragrapheA.textContent = ratingsA;
-            // $('#displayRatings').append(paragrapheB);
-            // paragrapheB.textContent = ratingsB;
-            // $('#displayRatings').append(paragrapheC);
-            // $('<button id="btnRate">Rate this restaurant</button>').appendTo('#displayRatings');
-
-            // $('#saveRateBtn').on('click', function () {
-
-
-            //     // restaurant.ratings.push(newRate);
-            //     // // sessionStorage.setItem("ratings", newRate);
-            //     // // sessionStorage.getItem("ratings");
-            //     // let ratingsC = restaurant.ratings[2].comment
-            //     // paragrapheC.textContent = ratingsC;
-            //     // $('#modalRate').addClass('d-none').removeClass('d-block');
-            //     // console.log(restaurant.ratings);
-            // });
-
-            // $('#review').val("");
-            // closeModal()
         });
     }
 }
 
+// AFFICHE LE NOM DU RESTAURANT AU CLIC
 function onSelectRestaurant(restaurant) {
-    console.log(restaurant);
     $('.restaurant-rating').text("");
     const $restaurantName = $('.restaurant-name');
     $restaurantName.text(restaurant.restaurantName);
-    displayRatings(restaurant);
+    displayStars(restaurant)
+    displayComments(restaurant);
     $('#btnRate').addClass('d-block').removeClass('d-none');
 }
 
+// AJOUTER UN AVIS
 function onRateRestaurant() {
     const restaurantName = $('.restaurant-name').text();
     const selectedRestaurant = restaurants.filter(resto => resto.restaurantName === restaurantName)[0];
@@ -76,11 +44,23 @@ function onRateRestaurant() {
     $('#review').val("");
 }
 
-function displayRatings(restaurant) {
+// AFFICHE LES AVIS
+function displayComments(restaurant) {
     for (let i = 0; i < restaurant.ratings.length; i++) {
         let createDiv = document.createElement("p");
         $('.restaurant-rating').append(createDiv);
         createDiv.textContent = restaurant.ratings[i].comment;
+    }
+}
+
+// AFFICHE LA MOYENNE DES ETOILES
+function displayStars(restaurant) {
+    let averageStars = 0;
+    for (let i = 0; i < restaurant.ratings.length; i++) {
+        const $stars = $('.restaurant-stars');
+        averageStars += parseInt(restaurant.ratings[i].stars);
+        $stars.text("Stars " + averageStars / restaurant.ratings.length);
+        console.log(restaurant.ratings[i].stars)
     }
 }
 
