@@ -1,4 +1,3 @@
-const starsValue = $("#select-stars");
 let restaurants;
 
 // AFFICHE LES MARKERS DES RESTAURANTS
@@ -39,12 +38,12 @@ function onSelectRestaurant(restaurant) {
 function onRateRestaurant() {
     const restaurantName = $('.restaurant-name').text();
     const selectedRestaurant = restaurants.filter(resto => resto.restaurantName === restaurantName)[0];
+    const $starsValue = $("#select-stars");
     let newRating = {
-        "stars": parseInt(starsValue.val()),
+        "stars": parseInt($starsValue.val()),
         "comment": $('#review').val()
     };
     selectedRestaurant.ratings.push(newRating);
-    console.log(parseInt(starsValue.val()));
     $('#review').val("");
 }
 
@@ -63,8 +62,9 @@ function displayStars(restaurant) {
     for (let i = 0; i < restaurant.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
         averageStars += parseInt(restaurant.ratings[i].stars);
-        $stars.text("Average Stars : " + averageStars / restaurant.ratings.length);
-    }
+        let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10 // Arrondi au 10ème
+        $stars.text("Average Stars : " + average);
+    } 
 }
 
 
