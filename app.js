@@ -58,24 +58,30 @@ function setMarkers(map, data) {
 }
 
 function onSelectRestaurant(restaurant) {
-    console.log("====")
-    console.log(restaurant)
-    const $restaurantName = $('.restaurant-name')
-    $restaurantName.text(restaurant.restaurantName)
+    console.log(restaurant);
+    $('.restaurant-rating').text("");
+    const $restaurantName = $('.restaurant-name');
+    $restaurantName.text(restaurant.restaurantName);
+    displayRatings(restaurant);
+    $('#btnRate').addClass('d-block').removeClass('d-none');
 }
 
 function onRateRestaurant() {
-    const restaurantName = $('.restaurant-name').text()
-    const selectedRestaurant = restaurants.filter(resto => resto.restaurantName === restaurantName)[0]
+    const restaurantName = $('.restaurant-name').text();
+    const selectedRestaurant = restaurants.filter(resto => resto.restaurantName === restaurantName)[0];
+    let newRating = {
+        "comment": $('#review').val()
+    };
+    selectedRestaurant.ratings.push(newRating);
+    $('#review').val("");
+}
 
-    const newRating = {
-        stars: 2,
-        comment: "C'est de la balle!!"
+function displayRatings(restaurant) {
+    for (let i = 0; i < restaurant.ratings.length; i++) {
+        let createDiv = document.createElement("p");
+        $('.restaurant-rating').append(createDiv);
+        createDiv.textContent = restaurant.ratings[i].comment;
     }
-
-    selectedRestaurant.ratings.push(newRating)
-
-    console.log(selectedRestaurant.ratings)
 }
 
 
