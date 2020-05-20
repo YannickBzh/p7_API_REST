@@ -1,4 +1,5 @@
-let restaurants
+const starsValue = $("#select-stars");
+let restaurants;
 
 // AFFICHE LES MARKERS DES RESTAURANTS
 function setMarkers(map, data) {
@@ -7,7 +8,7 @@ function setMarkers(map, data) {
         type: 'poly'
     };
 
-    restaurants = data
+    restaurants = data;
 
     for (let i = 0; i < data.length; i++) {
         let restaurant = data[i];
@@ -18,17 +19,18 @@ function setMarkers(map, data) {
             title: restaurant.restaurantName
         });
         marker.addListener('click', function () {
-            onSelectRestaurant(restaurant)
+            onSelectRestaurant(restaurant);
         });
     }
 }
 
 // AFFICHE LE NOM DU RESTAURANT AU CLIC
 function onSelectRestaurant(restaurant) {
+    console.log(restaurant);
     $('.restaurant-rating').text("");
     const $restaurantName = $('.restaurant-name');
     $restaurantName.text(restaurant.restaurantName);
-    displayStars(restaurant)
+    displayStars(restaurant);
     displayComments(restaurant);
     $('#btnRate').addClass('d-block').removeClass('d-none');
 }
@@ -38,9 +40,11 @@ function onRateRestaurant() {
     const restaurantName = $('.restaurant-name').text();
     const selectedRestaurant = restaurants.filter(resto => resto.restaurantName === restaurantName)[0];
     let newRating = {
+        "stars": parseInt(starsValue.val()),
         "comment": $('#review').val()
     };
     selectedRestaurant.ratings.push(newRating);
+    console.log(parseInt(starsValue.val()));
     $('#review').val("");
 }
 
@@ -59,8 +63,7 @@ function displayStars(restaurant) {
     for (let i = 0; i < restaurant.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
         averageStars += parseInt(restaurant.ratings[i].stars);
-        $stars.text("Stars " + averageStars / restaurant.ratings.length);
-        console.log(restaurant.ratings[i].stars)
+        $stars.text("Average Stars : " + averageStars / restaurant.ratings.length);
     }
 }
 
@@ -131,9 +134,9 @@ $('#btnRate').click(function () {
 })
 
 $('#saveRateBtn').click(function () {
-    onRateRestaurant()
+    onRateRestaurant();
 })
 
 $(document).ready(function () {
-    fetchData()
+    fetchData();
 })
