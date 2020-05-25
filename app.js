@@ -23,15 +23,17 @@ function setMarkers(map, data) {
     }
 }
 
+
+
 // AFFICHE LE NOM DU RESTAURANT AU CLIC
 function onSelectRestaurant(restaurant) {
-    console.log(restaurant);
     $('.restaurant-rating').text("");
     const $restaurantName = $('.restaurant-name');
     $restaurantName.text(restaurant.restaurantName);
-    displayStars(restaurant);
-    displayComments(restaurant);
+    displayAverageNotation(restaurant);
+    displayReviews(restaurant);
     $('#btnRate').addClass('d-block').removeClass('d-none');
+    console.log(restaurant.ratings)
 }
 
 // AJOUTER UN AVIS
@@ -48,7 +50,7 @@ function onRateRestaurant() {
 }
 
 // AFFICHE LES AVIS
-function displayComments(restaurant) {
+function displayReviews(restaurant) {
     for (let i = 0; i < restaurant.ratings.length; i++) {
         let createDiv = document.createElement("p");
         $('.restaurant-rating').append(createDiv);
@@ -57,19 +59,19 @@ function displayComments(restaurant) {
 }
 
 // AFFICHE LA MOYENNE DES ETOILES
-function displayStars(restaurant) {
+function displayAverageNotation(restaurant) {
     let averageStars = 0;
     for (let i = 0; i < restaurant.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
         averageStars += parseInt(restaurant.ratings[i].stars);
         let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10 // Arrondi au 10ème
-        $stars.text("Average Stars : " + average);
+        $stars.text("Average : " + average);
     } 
 }
 
-
 // APPEL DE LA MAP
 let map, infoWindow;
+let marker;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 44.8333, lng: -0.5667 },
@@ -97,7 +99,22 @@ function initMap() {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
     }
+
+    google.maps.event.addListener(map, 'click', function(event) {
+        if (marker) {
+               marker.setPosition(event.latLng);
+        } else {
+               marker = new google.maps.Marker({
+               position: event.latLng,
+               map: map,
+               title: 'New marker',
+               draggable: true,
+           });
+       }
+    })
 }
+
+
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
@@ -116,9 +133,6 @@ function fetchData() {
         .then(restos => {
             setMarkers(map, restos);
         })
-        // .then(restos => {
-        //     saveToSessionStorage(restos);
-        // })
         .catch(function (err) {
             console.log('Problème');
             console.log(err);
