@@ -71,7 +71,7 @@ function displayAverageNotation(restaurant) {
 
 // APPEL DE LA MAP
 let map, infoWindow;
-let marker;
+let addNewMarker;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 44.8333, lng: -0.5667 },
@@ -101,16 +101,19 @@ function initMap() {
     }
 
     google.maps.event.addListener(map, 'click', function(event) {
-        if (marker) {
-               marker.setPosition(event.latLng);
+        if (addNewMarker) {
+            addNewMarker.setPosition(event.latLng);
         } else {
-               marker = new google.maps.Marker({
+            addNewMarker = new google.maps.Marker({
                position: event.latLng,
                map: map,
                title: 'New marker',
                draggable: true,
            });
        }
+       addNewMarker.addListener('click', function () {
+        console.log("Ouverture modal")
+    });
     })
 }
 
