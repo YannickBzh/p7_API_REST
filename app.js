@@ -47,6 +47,10 @@ function onRateRestaurant() {
     };
     selectedRestaurant.ratings.push(newRating);
     $('#review').val("");
+    let createDiv = document.createElement("p");
+    $('.restaurant-rating').append(createDiv);
+    createDiv.textContent = newRating.comment
+    displayAverageNotation(restaurants[1])
 }
 
 // AFFICHE LES AVIS
@@ -99,20 +103,23 @@ function initMap() {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
     }
-
+    // Adding a new marker on map
     google.maps.event.addListener(map, 'click', function(event) {
         if (addNewMarker) {
             addNewMarker.setPosition(event.latLng);
+            
         } else {
             addNewMarker = new google.maps.Marker({
                position: event.latLng,
                map: map,
                title: 'New marker',
                draggable: true,
-           });
+           }); 
+        //    console.log(event.latLng.lat.a)
+        //    console.log(addNewMarker.position.lat)
        }
        addNewMarker.addListener('click', function () {
-        console.log("Ouverture modal")
+        $('#modal-new-restaurant').addClass('d-block').removeClass('d-none');
     });
     })
 }
@@ -144,6 +151,10 @@ function fetchData() {
 
 $('#closeModal').click(function () {
     $('#modalRate').addClass('d-none').removeClass('d-block');
+})
+
+$('#close-modal-new-restaurant').click(function () {
+    $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
 })
 
 $('#btnRate').click(function () {
