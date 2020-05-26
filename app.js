@@ -49,8 +49,8 @@ function onRateRestaurant() {
     $('#review').val("");
     let createDiv = document.createElement("p");
     $('.restaurant-rating').append(createDiv);
-    createDiv.textContent = newRating.comment
-    displayAverageNotation(restaurants[1])
+    createDiv.textContent = newRating.comment;
+    displayAverageNotation(selectedRestaurant)
 }
 
 // AFFICHE LES AVIS
