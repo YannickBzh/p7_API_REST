@@ -50,7 +50,7 @@ function onRateRestaurant() {
     let createDiv = document.createElement("p");
     $('.restaurant-rating').append(createDiv);
     createDiv.textContent = newRating.comment;
-    displayAverageNotation(selectedRestaurant)
+    displayAverageNotation(selectedRestaurant);
 }
 
 // AFFICHE LES AVIS
@@ -68,10 +68,31 @@ function displayAverageNotation(restaurant) {
     for (let i = 0; i < restaurant.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
         averageStars += parseInt(restaurant.ratings[i].stars);
-        let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10 // Arrondi au 10ème
+        let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
         $stars.text("Average : " + average);
     } 
 }
+
+// Ajouter un restaurant
+function addNewRestaurant() {
+    const $NewRestaurantName = $('#name-new-restaurant').val();
+    const $NewRestaurantAddress = $('#address-new-restaurant').val();
+    let newRestaurant = {
+        "restaurantName": $NewRestaurantName,
+        "address": $NewRestaurantAddress,
+        "lat": 44.839191,
+        "long": -0.571334,
+        "ratings": [
+            {
+                "stars": "",
+                "comment": ""
+            },
+        ]
+    }
+    restaurants.push(newRestaurant);
+    console.log(restaurants)
+}
+
 
 // APPEL DE LA MAP
 let map, infoWindow;
@@ -163,6 +184,10 @@ $('#btnRate').click(function () {
 
 $('#saveRateBtn').click(function () {
     onRateRestaurant();
+})
+
+$('#add-restaurant').click(function () {
+    addNewRestaurant();
 })
 
 $(document).ready(function () {

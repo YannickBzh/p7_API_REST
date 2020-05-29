@@ -23,6 +23,9 @@ h1 {
     padding:0 !important;
 }
 
+#modal-new-restaurant input {
+    padding-right:62%;
+}
 
 /* .displayRatings {
     height:100px;
