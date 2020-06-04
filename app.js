@@ -24,7 +24,6 @@ function setMarkers(map, data) {
 }
 
 
-
 // AFFICHE LE NOM DU RESTAURANT AU CLIC
 function onSelectRestaurant(restaurant) {
     $('.restaurant-rating').text("");
@@ -33,7 +32,7 @@ function onSelectRestaurant(restaurant) {
     displayAverageNotation(restaurant);
     displayReviews(restaurant);
     $('#btnRate').addClass('d-block').removeClass('d-none');
-    console.log(restaurant.ratings)
+    closeModal()
 }
 
 // AJOUTER UN AVIS
@@ -48,17 +47,24 @@ function onRateRestaurant() {
     selectedRestaurant.ratings.push(newRating);
     $('#review').val("");
     let createDiv = document.createElement("p");
+    let createDivForStars = document.createElement("p");
     $('.restaurant-rating').append(createDiv);
     createDiv.textContent = newRating.comment;
+    $('.restaurant-rating').append(createDivForStars);
+    createDivForStars.textContent = "Note de l'internaute : " + newRating.stars;
     displayAverageNotation(selectedRestaurant);
+    closeModal()
 }
 
 // AFFICHE LES AVIS
 function displayReviews(restaurant) {
     for (let i = 0; i < restaurant.ratings.length; i++) {
         let createDiv = document.createElement("p");
+        let createDivForStars = document.createElement("p");
         $('.restaurant-rating').append(createDiv);
         createDiv.textContent = restaurant.ratings[i].comment;
+        $('.restaurant-rating').append(createDivForStars);
+        createDivForStars.textContent = "Note de l'internaute : " + restaurant.ratings[i].stars;
     }
 }
 
@@ -70,28 +76,45 @@ function displayAverageNotation(restaurant) {
         averageStars += parseInt(restaurant.ratings[i].stars);
         let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
         $stars.text("Average : " + average);
-    } 
+    }
 }
 
-// Ajouter un restaurant
-function addNewRestaurant() {
-    const $NewRestaurantName = $('#name-new-restaurant').val();
-    const $NewRestaurantAddress = $('#address-new-restaurant').val();
-    let newRestaurant = {
-        "restaurantName": $NewRestaurantName,
-        "address": $NewRestaurantAddress,
-        "lat": 44.839191,
-        "long": -0.571334,
-        "ratings": [
-            {
-                "stars": "",
-                "comment": ""
-            },
-        ]
-    }
-    restaurants.push(newRestaurant);
-    console.log(restaurants)
+
+
+// TODO: il y a un bug quand on click plusieurs fois sur la map et qu'on ferme la modale sans noter un restaurant, plusieurs markeurs sont créés.
+function createRestaurant(event) {
+    $('#modal-new-restaurant').addClass('d-block').removeClass('d-none');
+    const $addRestaurantBtn = $('#add-restaurant');
+    const restaurantLat = event.latLng.lat();
+    const restaurantLng = event.latLng.lng();
+
+    $addRestaurantBtn.click(function () {
+        const restaurant = {
+            "restaurantName": $('#name-new-restaurant').val(),
+            "address": $('#address-new-restaurant').val(),
+            "lat": restaurantLat,
+            "long": restaurantLng,
+            "ratings": []
+        }
+        restaurants.push(restaurant);
+
+        $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
+        $('#name-new-restaurant').val("");
+        $('#address-new-restaurant').val("");
+
+        const restaurantMarker = new google.maps.Marker({
+            position: event.latLng,
+            map: map,
+            title: 'New marker',
+            draggable: true,
+        });
+
+        restaurantMarker.addListener('click', function () {
+            onSelectRestaurant(restaurant);
+        });
+    })
 }
+
 
 
 // APPEL DE LA MAP
@@ -125,23 +148,8 @@ function initMap() {
         handleLocationError(false, infoWindow, map.getCenter());
     }
     // Adding a new marker on map
-    google.maps.event.addListener(map, 'click', function(event) {
-        if (addNewMarker) {
-            addNewMarker.setPosition(event.latLng);
-            
-        } else {
-            addNewMarker = new google.maps.Marker({
-               position: event.latLng,
-               map: map,
-               title: 'New marker',
-               draggable: true,
-           }); 
-        //    console.log(event.latLng.lat.a)
-        //    console.log(addNewMarker.position.lat)
-       }
-       addNewMarker.addListener('click', function () {
-        $('#modal-new-restaurant').addClass('d-block').removeClass('d-none');
-    });
+    google.maps.event.addListener(map, 'click', function (event) {
+        createRestaurant(event)
     })
 }
 
@@ -154,6 +162,20 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
 }
+
+
+$("#filter-btn").click(function (restaurant) {
+    let choiceDisplayingRestaurants = $("[name=numberOfStars]");
+    for (i = 0; i < choiceDisplayingRestaurants.length; i++) {
+        if (choiceDisplayingRestaurants[0].checked) {
+            console.log("------")
+            return
+        } else {
+            console.log("+++++++")
+            return
+        }
+    }
+});
 
 
 function fetchData() {
@@ -170,9 +192,12 @@ function fetchData() {
         })
 }
 
-$('#closeModal').click(function () {
-    $('#modalRate').addClass('d-none').removeClass('d-block');
-})
+
+function closeModal() {
+    $('#closeModal').click(function () {
+        $('#modalRate').addClass('d-none').removeClass('d-block');
+    })
+}
 
 $('#close-modal-new-restaurant').click(function () {
     $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
@@ -184,10 +209,6 @@ $('#btnRate').click(function () {
 
 $('#saveRateBtn').click(function () {
     onRateRestaurant();
-})
-
-$('#add-restaurant').click(function () {
-    addNewRestaurant();
 })
 
 $(document).ready(function () {

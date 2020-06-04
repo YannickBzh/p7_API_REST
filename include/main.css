@@ -27,6 +27,11 @@ h1 {
     padding-right:62%;
 }
 
+.color {
+    background-color: skyblue;
+    padding:5%;
+}
+
 /* .displayRatings {
     height:100px;
     width:100%;
