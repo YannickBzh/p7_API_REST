@@ -1,4 +1,5 @@
 let restaurants;
+let markers = [];
 
 // AFFICHE LES MARKERS DES RESTAURANTS
 function setMarkers(map, data) {
@@ -20,6 +21,7 @@ function setMarkers(map, data) {
         marker.addListener('click', function () {
             onSelectRestaurant(restaurant);
         });
+        markers.push(marker)
     }
 }
 
@@ -84,7 +86,7 @@ function displayAverageNotation(restaurant) {
 function displayStreetViewImage(restaurant) {
     let createDivForStreetView = document.createElement("img");
     $('.restaurant-rating').append(createDivForStreetView);
-    createDivForStreetView.src = restaurant.link;
+    createDivForStreetView.src = restaurant.link + apiKey;
 }
 
 function createRestaurant(event) {
@@ -95,12 +97,15 @@ function createRestaurant(event) {
 
     $addRestaurantBtn.click(function () {
         const restaurant = {
+            // Penser à ajouter l'id
             "restaurantName": $('#name-new-restaurant').val(),
             "address": $('#address-new-restaurant').val(),
             "lat": restaurantLat,
             "long": restaurantLng,
-            "ratings": []
+            "ratings": [],
+            link: `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${restaurantLat},${restaurantLng}&heading=151.78&pitch=-0.76&key=`
         }
+
         restaurants.push(restaurant);
         $('#add-restaurant').unbind("click")
 
@@ -172,16 +177,13 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 
 $("#filter-btn").click(function (restaurant) {
-    let filterRestaurants = $("[name=numberOfStars]");
-    for (i = 0; i < filterRestaurants.length; i++) {
-        if (filterRestaurants[0].checked) {
-            console.log("------")
-            return
-        } else {
-            console.log("+++++++")
-            return
-        }
-    }
+    // Pour résoudre le problème:  
+    // 1. Je trouve le moyen de pouvoir accéder à tous les markers
+    // 2. Je selectionne un marker et j'essaye de le masquer
+    // 3. Une fois, il faudra que je filtre sur mes restos ()
+    // 4. En fonction des restaurants filtrés, je filtre mes markers
+    const marker = markers[0]
+
 });
 
 
