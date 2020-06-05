@@ -97,6 +97,7 @@ function createRestaurant(event) {
             "ratings": []
         }
         restaurants.push(restaurant);
+        $('#add-restaurant').unbind("click")
 
         $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
         $('#name-new-restaurant').val("");
@@ -149,7 +150,8 @@ function initMap() {
     }
     // Adding a new marker on map
     google.maps.event.addListener(map, 'click', function (event) {
-        createRestaurant(event)
+        $('#add-restaurant').unbind("click")
+        createRestaurant(event);
     })
 }
 
@@ -202,6 +204,7 @@ function closeModal() {
 $('#close-modal-new-restaurant').click(function () {
     $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
 })
+
 
 $('#btnRate').click(function () {
     $('#modalRate').addClass('d-block').removeClass('d-none');
