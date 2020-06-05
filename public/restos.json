@@ -5,6 +5,7 @@
         "address": "10 Rue Maucoudinat, 33000 Bordeaux",
         "lat": 44.839191,
         "long": -0.571334,
+        "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.839191,-0.571334&heading=151.78&pitch=-0.76&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA",
         "ratings": [
             {
                 "stars": 5,
@@ -22,6 +23,7 @@
         "address": "33 Rue du Loup, 33000 Bordeaux",
         "lat": 44.834182,
         "long": -0.573081,
+        "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.834182,-0.573081&heading=151.78&pitch=-0.76&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA",
         "ratings": [
             {
                 "stars": 5,
@@ -39,6 +41,7 @@
         "address": "19 Rue Poquelin Molière, 33000 Bordeaux",
         "lat": 44.839982,
         "long": -0.577416,
+        "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.839982,-0.577416&heading=151.78&pitch=-0.76&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA",
         "ratings": [
             {
                 "stars": 5,
@@ -56,6 +59,7 @@
         "address": "50 Rue Saint-Rémi, 33000 Bordeaux",
         "lat": 44.841245,
         "long": -0.573056,
+        "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.841245,-0.573056&heading=151.78&pitch=-0.76&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA",
         "ratings": [
             {
                 "stars": 5,
@@ -73,6 +77,7 @@
         "address": "2 Place de la Comédie, 33000 Bordeaux",
         "lat": 44.842738,
         "long": -0.574087,
+        "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.842738,-0.574087&heading=151.78&pitch=-0.76&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA",
         "ratings": [
             {
                 "stars": 5,

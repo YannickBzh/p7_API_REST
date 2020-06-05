@@ -31,6 +31,7 @@ function onSelectRestaurant(restaurant) {
     $restaurantName.text(restaurant.restaurantName);
     displayAverageNotation(restaurant);
     displayReviews(restaurant);
+    displayStreetViewImage(restaurant)
     $('#btnRate').addClass('d-block').removeClass('d-none');
     closeModal()
 }
@@ -65,6 +66,7 @@ function displayReviews(restaurant) {
         createDiv.textContent = restaurant.ratings[i].comment;
         $('.restaurant-rating').append(createDivForStars);
         createDivForStars.textContent = "Note de l'internaute : " + restaurant.ratings[i].stars;
+        
     }
 }
 
@@ -79,9 +81,12 @@ function displayAverageNotation(restaurant) {
     }
 }
 
+function displayStreetViewImage(restaurant) {
+    let createDivForStreetView = document.createElement("img");
+    $('.restaurant-rating').append(createDivForStreetView);
+    createDivForStreetView.src = restaurant.link;
+}
 
-
-// TODO: il y a un bug quand on click plusieurs fois sur la map et qu'on ferme la modale sans noter un restaurant, plusieurs markeurs sont créés.
 function createRestaurant(event) {
     $('#modal-new-restaurant').addClass('d-block').removeClass('d-none');
     const $addRestaurantBtn = $('#add-restaurant');
@@ -167,9 +172,9 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 
 $("#filter-btn").click(function (restaurant) {
-    let choiceDisplayingRestaurants = $("[name=numberOfStars]");
-    for (i = 0; i < choiceDisplayingRestaurants.length; i++) {
-        if (choiceDisplayingRestaurants[0].checked) {
+    let filterRestaurants = $("[name=numberOfStars]");
+    for (i = 0; i < filterRestaurants.length; i++) {
+        if (filterRestaurants[0].checked) {
             console.log("------")
             return
         } else {
