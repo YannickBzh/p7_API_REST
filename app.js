@@ -110,7 +110,6 @@ function getAverage(restaurant) {
 
 // AFFICHE LA MOYENNE DES ETOILES
 function displayAverageNotation(restaurant) {
-   // let marker;
     let averageStars = 0;
     for (let i = 0; i < restaurant.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
