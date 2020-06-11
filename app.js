@@ -1,5 +1,4 @@
 let restaurants;
-//let markers = [];
 
 // AFFICHE LES MARKERS DES RESTAURANTS
 function setMarkers(map, data) {
@@ -21,27 +20,33 @@ function setMarkers(map, data) {
         marker.addListener('click', function () {
             onSelectRestaurant(restaurant);
         });
-
-        $("#filter-btn").click(function () {
-            let filterRestaurants = $("[name=numberOfStars]");
-            //markers.setMap(map)
-            for (i = 0; i < filterRestaurants.length; i++) {
-                if (filterRestaurants[0].checked){
-                    getAverage(restaurant)
-                    marker.setVisible(false);
-                    
-                    //console.log(averageStars)
-                    // console.log(restaurants[0])
-                    // console.log("------");
-                    // console.log(markers[0].title);
-                    return
-                } else {
-                    marker.setVisible(true);
-                    return
-                }
-            }
-        });
+        
+        filter(marker, restaurant)
+        resetFilter(marker)
     }
+}
+
+function filter(marker, restaurant) {
+    $("#filter-btn").click(function () {
+        let filterRestaurants = $("[name=numberOfStars]");
+        for (i = 0; i < filterRestaurants.length; i++) {
+            if ((filterRestaurants[0].checked) && (getAverage(restaurant) >= 4)) {
+                marker.setVisible(false);
+            } if ((filterRestaurants[0].checked) && (getAverage(restaurant) < 4)) {
+                marker.setVisible(true);
+            } if ((filterRestaurants[1].checked) && (getAverage(restaurant) >= 4)) {
+                marker.setVisible(true);
+            } else if ((filterRestaurants[1].checked) && (getAverage(restaurant) < 4)) {
+                marker.setVisible(false);
+            } return
+        } 
+    });
+}
+
+function resetFilter(marker) {
+    $("#reset-btn").click(function () {
+        marker.setVisible(true);
+    })
 }
 
 
@@ -93,16 +98,19 @@ function displayReviews(restaurant) {
 
 function getAverage(restaurant) {
     let averageStars = 0;
+    let array = []
     for (let i = 0; i < restaurant.ratings.length; i++) {
-        averageStars += parseInt(restaurant.ratings[i].stars);
-        result = Math.round((averageStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
-        console.log(averageStars)
-        return averageStars
-    }
+        totalStars = averageStars += restaurant.ratings[i].stars;
+        result = Math.round((totalStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
+        array.push(result)
+    } 
+    return array[1]
 }
+
 
 // AFFICHE LA MOYENNE DES ETOILES
 function displayAverageNotation(restaurant) {
+   // let marker;
     let averageStars = 0;
     for (let i = 0; i < restaurant.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
@@ -149,12 +157,13 @@ function createRestaurant(event) {
             draggable: true,
         });
 
+        //restaurantMarker = marker
+
         restaurantMarker.addListener('click', function () {
             onSelectRestaurant(restaurant);
         });
     })
 }
-
 
 
 // APPEL DE LA MAP
@@ -203,39 +212,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
 }
-
-
-
-// $("#filter-btn").click(function (marker) {
-//     let filterRestaurants = $("[name=numberOfStars]");
-//     //markers.setMap(map)
-
-//     for (i = 0; i < filterRestaurants.length; i++) {
-        
-//         if (filterRestaurants[0].checked){
-//             //setMarkers(map, markers)
-//             toggleMarker();
-//             //console.log(averageStars)
-//             // console.log(restaurants[0])
-//             // console.log("------");
-//             // console.log(markers[0].title);
-//             return
-//         } else {
-//             console.log("+++++++")
-//             return
-//         }
-//     }
-// });
-
-
-// $("#filter-btn").click(function (restaurant) {
-//     const marker = markers[0]
-//     // Pour résoudre le problème:
-// 	// 1. Je trouve le moyen de pouvoir accéder à tous les markers
-// 	// 2. Je selectionne un marker et j'essaye de le masquer
-//     // 3. Une fois, il faudra que je filtre sur mes restos ()
-//     // 4. En fonction des restaurants filtrés, je filtre mes markers
-// });
 
 
 function fetchData() {
