@@ -20,15 +20,22 @@
                 <div class="color mb-3">
                     <div class="form-check">
                         <h1>Filtrer les restaurants</h1>
-                        <input class="form-check-input" type="radio" name="numberOfStars" id="inferieur-trois-etoiles"
+                        <input class="form-check-input" type="radio" name="numberOfStars" id="inferieur-deux-etoiles"
                             value="1" checked>
                         <label class="form-check-label" for="exampleRadios1">
-                            Inférieur à 4 étoiles
+                            Inférieur à 2 étoiles
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="numberOfStars"
+                            id="compris-deux-quatre-etoiles" value="2">
+                        <label class="form-check-label" for="exampleRadios2">
+                            Entre 2 et 4 étoiles
                         </label>
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="radio" name="numberOfStars" id="superieur-trois-etoiles"
-                            value="2">
+                        <input class="form-check-input" type="radio" name="numberOfStars" id="superieur-quatre-etoiles"
+                            value="3">
                         <label class="form-check-label" for="exampleRadios2">
                             Supérieur à 4 étoiles
                         </label>
@@ -126,7 +133,11 @@
         integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
     <script src="./conf.js"></script>
     <script src="./app.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA&callback=initMap"
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA&callback=initMap&libraries=places"
+        async defer></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name,rating,formatted_phone_number&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA"
         async defer></script>
 </body>
 

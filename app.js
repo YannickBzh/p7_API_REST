@@ -1,5 +1,8 @@
 let restaurants;
-
+let service;
+let pos;
+let request;
+let place;
 // AFFICHE LES MARKERS DES RESTAURANTS
 function setMarkers(map, data) {
     let shape = {
@@ -11,6 +14,7 @@ function setMarkers(map, data) {
 
     for (let i = 0; i < data.length; i++) {
         let restaurant = data[i];
+
         let marker = new google.maps.Marker({
             position: { lat: restaurant.lat, lng: restaurant.long },
             map: map,
@@ -20,26 +24,29 @@ function setMarkers(map, data) {
         marker.addListener('click', function () {
             onSelectRestaurant(restaurant);
         });
-        
-        filter(marker, restaurant)
+
+        filterRestaurantsByRates(marker, restaurant)
         resetFilter(marker)
     }
 }
 
-function filter(marker, restaurant) {
+function filterRestaurantsByRates(marker, restaurant) {
     $("#filter-btn").click(function () {
         let filterRestaurants = $("[name=numberOfStars]");
         for (i = 0; i < filterRestaurants.length; i++) {
-            if ((filterRestaurants[0].checked) && (getAverage(restaurant) >= 4)) {
+            if ((filterRestaurants[0].checked) && (getAverage(restaurant) >= 2)) {
                 marker.setVisible(false);
-            } if ((filterRestaurants[0].checked) && (getAverage(restaurant) < 4)) {
+            } if ((filterRestaurants[0].checked) && (getAverage(restaurant) < 2)) {
                 marker.setVisible(true);
-            } if ((filterRestaurants[1].checked) && (getAverage(restaurant) >= 4)) {
+            } else if ((filterRestaurants[1].checked) && ((getAverage(restaurant) >= 2) && (getAverage(restaurant) < 4))) {
                 marker.setVisible(true);
-            } else if ((filterRestaurants[1].checked) && (getAverage(restaurant) < 4)) {
+            } else marker.setVisible(false);
+            if ((filterRestaurants[2].checked) && (getAverage(restaurant) >= 4)) {
+                marker.setVisible(true);
+            } if ((filterRestaurants[2].checked) && (getAverage(restaurant) < 4)) {
                 marker.setVisible(false);
             } return
-        } 
+        }
     });
 }
 
@@ -75,10 +82,10 @@ function onRateRestaurant() {
     $('#review').val("");
     let createDiv = document.createElement("p");
     let createDivForStars = document.createElement("p");
-    $('.restaurant-rating').append(createDiv);
-    createDiv.textContent = newRating.comment;
-    $('.restaurant-rating').append(createDivForStars);
+    $('.restaurant-rating').prepend(createDivForStars);
     createDivForStars.textContent = "Note de l'internaute : " + newRating.stars;
+    $('.restaurant-rating').prepend(createDiv);
+    createDiv.textContent = newRating.comment;
     displayAverageNotation(selectedRestaurant);
     closeModal()
 }
@@ -103,7 +110,7 @@ function getAverage(restaurant) {
         totalStars = averageStars += restaurant.ratings[i].stars;
         result = Math.round((totalStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
         array.push(result)
-    } 
+    }
     return array[1]
 }
 
@@ -116,7 +123,7 @@ function displayAverageNotation(restaurant) {
         averageStars += parseInt(restaurant.ratings[i].stars);
         let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
         $stars.text("Average : " + average);
-    } 
+    }
 }
 
 function displayStreetViewImage(restaurant) {
@@ -127,13 +134,13 @@ function displayStreetViewImage(restaurant) {
 
 function createRestaurant(event) {
     $('#modal-new-restaurant').addClass('d-block').removeClass('d-none');
+    const $stars = $('.restaurant-stars');
     const $addRestaurantBtn = $('#add-restaurant');
     const restaurantLat = event.latLng.lat();
     const restaurantLng = event.latLng.lng();
 
     $addRestaurantBtn.click(function () {
         const restaurant = {
-            // Penser à ajouter l'id
             "restaurantName": $('#name-new-restaurant').val(),
             "address": $('#address-new-restaurant').val(),
             "lat": restaurantLat,
@@ -144,7 +151,6 @@ function createRestaurant(event) {
 
         restaurants.push(restaurant);
         $('#add-restaurant').unbind("click")
-
         $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
         $('#name-new-restaurant').val("");
         $('#address-new-restaurant').val("");
@@ -156,18 +162,19 @@ function createRestaurant(event) {
             draggable: true,
         });
 
-        //restaurantMarker = marker
-
         restaurantMarker.addListener('click', function () {
+            $stars.text("")
             onSelectRestaurant(restaurant);
         });
+        
+        // filterRestaurantsByRates(restaurantMarker, restaurant)
+        // resetFilter(restaurantMarker)
     })
 }
 
 
 // APPEL DE LA MAP
 let map, infoWindow;
-let addNewMarker;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 44.8333, lng: -0.5667 },
@@ -176,10 +183,20 @@ function initMap() {
 
     infoWindow = new google.maps.InfoWindow;
 
-    // GEOLOCALISATION
+    getLocation()
+
+    // Adding a new marker on map
+    google.maps.event.addListener(map, 'click', function (event) {
+        $('#add-restaurant').unbind("click")
+        createRestaurant(event);
+    })
+}
+
+function getLocation() {
+    // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            let pos = {
+            pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
@@ -188,6 +205,7 @@ function initMap() {
             infoWindow.setContent('Vous êtes ici');
             infoWindow.open(map);
             map.setCenter(pos);
+            getNearByPlaces(pos);
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -195,14 +213,45 @@ function initMap() {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
     }
-    // Adding a new marker on map
-    google.maps.event.addListener(map, 'click', function (event) {
-        $('#add-restaurant').unbind("click")
-        createRestaurant(event);
-    })
+
+    infowindow = new google.maps.InfoWindow();
 }
 
+function getNearByPlaces(pos) {
+    request = {
+        location: pos,
+        radius: '20000',
+        query: 'restaurant'
+    };
 
+    service = new google.maps.places.PlacesService(map);
+    service.textSearch(request, callback);
+}
+
+function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        let bounds = new google.maps.LatLngBounds();
+        for (let i = 0; i < results.length; i++) {
+            place = results[i];
+            let mark = createMarker(results[i]);
+            bounds.extend(mark.getPosition());
+        }
+        map.fitBounds(bounds);
+    } else console.log("callback.status=" + status);
+}
+
+function createMarker(place) {
+    let marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+    });
+
+    google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+    });
+    return marker;
+}
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
@@ -221,6 +270,10 @@ function fetchData() {
         .then(restos => {
             setMarkers(map, restos);
         })
+        // fetch('https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name,rating,formatted_phone_number&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA')
+        // .then(function(name) {
+        //     console.log(name)
+        // })
         .catch(function (err) {
             console.log('Problème');
             console.log(err);

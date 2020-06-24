@@ -8,11 +8,11 @@
         "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.839191,-0.571334&heading=151.78&pitch=-0.76&key=",
         "ratings": [
             {
-                "stars": 5,
+                "stars": 2,
                 "comment": "Pizzeria extraordinaire !!! Pizza super bonnes, et personnel extrêmement gentil et sympathique. Malgré le prix de certaines pizza pouvant aller jusqu’à 18€ !!! Mais sinon la qualité est au rendez-vous. Un conseil, si vous hésitez manger ici, FONCEZ"
             },
             {
-                "stars": 4,
+                "stars": 2,
                 "comment": "C'est un restaurant où on se sent en Italie, surtout à Naples, avec ses bonnes pizzas parsemées de vrais fromages italiens. Le personnel est accueillant et à l'écoute. Seul bémol sur la cuisson des calzones en fritto, un peu blanchâtre ! Je recommande volontier ce lieu."
             }
         ]
@@ -26,7 +26,7 @@
         "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.834182,-0.573081&heading=151.78&pitch=-0.76&key=",
         "ratings": [
             {
-                "stars": 5,
+                "stars": 3,
                 "comment": "Le meilleur kebap du monde! (Vraiment!)"
             },
             {
@@ -48,7 +48,7 @@
                 "comment": "Chambre sympa, accueil bien, et surtout super brunch le dimanche."
             },
             {
-                "stars": 3,
+                "stars": 4,
                 "comment": "Ça a plus l'air d'un bar à escortes qu'autre chose, menu restreint qui se veut de qualité mais qui reste très moyen"
             }
         ]
@@ -80,11 +80,11 @@
         "link": "https://maps.googleapis.com/maps/api/streetview?size=600x300&location=44.842738,-0.574087&heading=151.78&pitch=-0.76&key=",
         "ratings": [
             {
-                "stars": 5,
+                "stars": 1,
                 "comment": "Le cadre est super, la cuisine goûteuse et délicieuse le velouté de champignons de Paris à tomber par terre !"
             },
             {
-                "stars": 3,
+                "stars": 1,
                 "comment": "Quelle déception, ce chef qui donne des leçons dans ses émissions, ferait mieux de regarder dans ses propres assiettes. Plats sans saveur, desserts insipides, service oppressant....a déconseiller !"
             }
         ]
