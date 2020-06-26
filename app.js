@@ -167,8 +167,8 @@ function createRestaurant(event) {
             onSelectRestaurant(restaurant);
         });
         
-        // filterRestaurantsByRates(restaurantMarker, restaurant)
-        // resetFilter(restaurantMarker)
+        filterRestaurantsByRates(restaurantMarker, restaurant)
+        resetFilter(restaurantMarker)
     })
 }
 
@@ -220,7 +220,7 @@ function getLocation() {
 function getNearByPlaces(pos) {
     request = {
         location: pos,
-        radius: '20000',
+        radius: '2000',
         query: 'restaurant'
     };
 
@@ -270,10 +270,16 @@ function fetchData() {
         .then(restos => {
             setMarkers(map, restos);
         })
-        // fetch('https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name,rating,formatted_phone_number&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA')
-        // .then(function(name) {
-        //     console.log(name)
-        // })
+        .then(() => {
+            fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJgcpR9-gnVQ0RiXo5ewOGY3k&fields=name,rating,formatted_phone_number&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA', {
+                headers: {
+                  'Access-Control-Allow-Origin':'*'
+                }
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(() => console.log("+++++"))
+        })
         .catch(function (err) {
             console.log('Problème');
             console.log(err);
