@@ -216,6 +216,7 @@ function getLocation() {
 function getNearByPlaces(pos) {
     request = {
         location: pos,
+        type: "restaurant",
         radius: '2000',
         query: 'restaurant'
     };
@@ -265,7 +266,7 @@ function fetchData() {
             setMarkers(map, restos);
         })
         .then(() => {
-            fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?place_id=ChIJgcpR9-gnVQ0RiXo5ewOGY3k&fields=name,rating,review&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA', {
+            fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?place_id=ChIJgcpR9-gnVQ0RiXo5ewOGY3k&fields=name,rating,keyword&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA', {
                 headers: {
                   'Access-Control-Allow-Origin':'*'
                 }
