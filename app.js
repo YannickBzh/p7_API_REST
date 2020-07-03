@@ -23,6 +23,10 @@ function setMarkers(map, data) {
         });
         marker.addListener('click', function () {
             onSelectRestaurant(restaurant);
+
+            let restaurantReview = new GetInfoFromPlace(name, restaurant.ratings, restaurant.ratings[0].comment)
+            console.log("====")
+            console.log(restaurantReview.toString())
         });
 
         filterRestaurantsByRates(marker, restaurant)
@@ -222,15 +226,12 @@ function getNearByPlaces(pos) {
 
     let service = new google.maps.places.PlacesService(map);
 
-    service.nearbySearch(request, function(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          createMarker(results[i]);
-        //   test()
-        //   console.log(results[i])
-        //   console.log(" Nom: " + results[i].name + " || Note: " + results[i].rating)
-        }
-      }
+    service.nearbySearch(request, function (results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (let i = 0; i < results.length; i++) {
+                createMarker(results[i]);
+            }
+        };
     });
 }
 
@@ -239,21 +240,32 @@ function getRatingByPlaceId(placeId) {
         placeId: placeId,
         fields: ['name', 'rating', 'geometry', 'review']
     };
-      
+
     service = new google.maps.places.PlacesService(map);
     service.getDetails(request, callback);
-      
+
     function callback(place, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             console.log("====")
+            // console.log(place.reviews[0].text)
+            // console.log("====")
             console.log(place)
-            console.log("====")
         } else {
             console.log("+++++")
         }
     }
-} 
+}
 
+function GetInfoFromPlace(name, rating, reviews) {
+
+    this.name = name;
+    this.rating = rating;
+    this.reviews = reviews;
+
+    this.toString = function () {
+        return this.name + " " + this.rating + " " + this.reviews;
+    };
+}
 
 function createMarker(place) {
     let marker = new google.maps.Marker({
@@ -265,8 +277,12 @@ function createMarker(place) {
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(place.name);
         infowindow.open(map, this);
-        
         getRatingByPlaceId(marker.placeId)
+
+        let placeReview = new GetInfoFromPlace(place.name, place.rating, place)
+        console.log("====")
+        console.log(placeReview.toString())
+        
     });
 }
 
@@ -292,6 +308,13 @@ function fetchData() {
             console.log(err);
         })
 }
+
+
+
+// let placeReview = new GetInfoFromPlace(place.name, place.rating, place.reviews.text)
+
+// console.log(placeReview.toString());
+
 
 
 function closeModal() {
