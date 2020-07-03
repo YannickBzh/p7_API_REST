@@ -217,8 +217,7 @@ function getNearByPlaces(pos) {
     request = {
         location: pos,
         type: "restaurant",
-        radius: '2000',
-        query: 'restaurant'
+        radius: '2000'
     };
 
     let service = new google.maps.places.PlacesService(map);
@@ -227,24 +226,47 @@ function getNearByPlaces(pos) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         for (let i = 0; i < results.length; i++) {
           createMarker(results[i]);
-          console.log(results[i])
-          console.log(" Nom: " + results[i].name + " || Note: " + results[i].rating)
+        //   test()
+        //   console.log(results[i])
+        //   console.log(" Nom: " + results[i].name + " || Note: " + results[i].rating)
         }
       }
     });
 }
 
+function getRatingByPlaceId(placeId) {
+    const request = {
+        placeId: placeId,
+        fields: ['name', 'rating', 'geometry', 'review']
+    };
+      
+    service = new google.maps.places.PlacesService(map);
+    service.getDetails(request, callback);
+      
+    function callback(place, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            console.log("====")
+            console.log(place)
+            console.log("====")
+        } else {
+            console.log("+++++")
+        }
+    }
+} 
+
 
 function createMarker(place) {
     let marker = new google.maps.Marker({
         map: map,
-        position: place.geometry.location
+        position: place.geometry.location,
+        placeId: place.place_id
     });
 
     google.maps.event.addListener(marker, 'click', function () {
-        console.log(place.rating)
         infowindow.setContent(place.name);
         infowindow.open(map, this);
+        
+        getRatingByPlaceId(marker.placeId)
     });
 }
 
@@ -264,15 +286,6 @@ function fetchData() {
         })
         .then(restos => {
             setMarkers(map, restos);
-        })
-        .then(() => {
-            fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?place_id=ChIJgcpR9-gnVQ0RiXo5ewOGY3k&fields=name,rating,keyword&key=AIzaSyBLolL325WSXOeihNoHn8ci0NdUqaZMBTA', {
-                headers: {
-                  'Access-Control-Allow-Origin':'*'
-                }
-            })
-            .then(res => res.json())
-            .catch(() => console.log("+++++"))
         })
         .catch(function (err) {
             console.log('Problème');
