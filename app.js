@@ -3,36 +3,8 @@ let service;
 let pos;
 let request;
 let place;
-// AFFICHE LES MARKERS DES RESTAURANTS
-function setMarkers(map, data) {
-    let shape = {
-        coords: [1, 1, 1, 20, 18, 20, 18, 1],
-        type: 'poly'
-    };
-
-    restaurants = data;
-
-    for (let i = 0; i < data.length; i++) {
-        let restaurant = data[i];
-
-        let marker = new google.maps.Marker({
-            position: { lat: restaurant.lat, lng: restaurant.long },
-            map: map,
-            shape: shape,
-            title: restaurant.restaurantName
-        });
-        marker.addListener('click', function () {
-            onSelectRestaurant(restaurant);
-
-            let restaurantReview = new GetInfoFromPlace(name, restaurant.ratings, restaurant.ratings[0].comment)
-            console.log("====")
-            console.log(restaurantReview.toString())
-        });
-
-        filterRestaurantsByRates(marker, restaurant)
-        resetFilter(marker)
-    }
-}
+let map;
+let infoWindow;
 
 function filterRestaurantsByRates(marker, restaurant) {
     $("#filter-btn").click(function () {
@@ -65,7 +37,7 @@ function resetFilter(marker) {
 function onSelectRestaurant(restaurant) {
     $('.restaurant-rating').text("");
     const $restaurantName = $('.restaurant-name');
-    $restaurantName.text(restaurant.restaurantName);
+    $restaurantName.text(restaurant.name);
     displayAverageNotation(restaurant);
     displayReviews(restaurant);
     displayStreetViewImage(restaurant)
@@ -133,7 +105,7 @@ function displayAverageNotation(restaurant) {
 function displayStreetViewImage(restaurant) {
     let createDivForStreetView = document.createElement("img");
     $('.restaurant-rating').append(createDivForStreetView);
-    createDivForStreetView.src = restaurant.link + apiKey;
+    createDivForStreetView.src = restaurant.picture + apiKey;
 }
 
 function createRestaurant(event) {
@@ -145,37 +117,39 @@ function createRestaurant(event) {
 
     $addRestaurantBtn.click(function () {
         const restaurant = {
-            "restaurantName": $('#name-new-restaurant').val(),
-            "address": $('#address-new-restaurant').val(),
-            "lat": restaurantLat,
-            "long": restaurantLng,
-            "ratings": [],
-            "link": `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${restaurantLat},${restaurantLng}&heading=151.78&pitch=-0.76&key=`
+            address: $('#address-new-restaurant').val(),
+            id: 1234,
+            lat: restaurantLat,
+            long: restaurantLng,
+            name: $('#name-new-restaurant').val(),
+            ratings: []
         }
 
-        restaurants.push(restaurant);
-        $('#add-restaurant').unbind("click")
-        $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
-        $('#name-new-restaurant').val("");
-        $('#address-new-restaurant').val("");
+        // À voir si ça sert à quelque chose ?
+        // restaurants.push(restaurant);
+        const place = new Place(restaurant)
 
-        const restaurantMarker = new google.maps.Marker({
-            position: event.latLng,
-            map: map,
-            title: 'New marker',
-            draggable: true,
-        });
 
-        restaurantMarker.addListener('click', function () {
-            $stars.text("")
-            onSelectRestaurant(restaurant);
-        });
+        // $('#add-restaurant').unbind("click")
+        // $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
+        // $('#name-new-restaurant').val("");
+        // $('#address-new-restaurant').val("");
+
+        // const restaurantMarker = new google.maps.Marker({
+        //     position: event.latLng,
+        //     map: map,
+        //     title: 'New marker',
+        //     draggable: true,
+        // });
+
+        // restaurantMarker.addListener('click', function () {
+        //     $stars.text("")
+        //     onSelectRestaurant(restaurant);
+        // });
     })
 }
 
 
-// APPEL DE LA MAP
-let map, infoWindow;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 44.8333, lng: -0.5667 },
@@ -229,7 +203,9 @@ function getNearByPlaces(pos) {
     service.nearbySearch(request, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (let i = 0; i < results.length; i++) {
-                createMarker(results[i]);
+                const adaptedPlace = placeAdapter(results[i])
+                const place = new Place(adaptedPlace)
+                createMarker(place)
             }
         };
     });
@@ -256,35 +232,6 @@ function getRatingByPlaceId(placeId) {
     }
 }
 
-function GetInfoFromPlace(name, rating, reviews) {
-
-    this.name = name;
-    this.rating = rating;
-    this.reviews = reviews;
-
-    this.toString = function () {
-        return this.name + " " + this.rating + " " + this.reviews;
-    };
-}
-
-function createMarker(place) {
-    let marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location,
-        placeId: place.place_id
-    });
-
-    google.maps.event.addListener(marker, 'click', function () {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
-        getRatingByPlaceId(marker.placeId)
-
-        let placeReview = new GetInfoFromPlace(place.name, place.rating, place)
-        console.log("====")
-        console.log(placeReview.toString())
-        
-    });
-}
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
@@ -294,6 +241,27 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
+function createMarker(place) {
+    let shape = {
+        coords: [1, 1, 1, 20, 18, 20, 18, 1],
+        type: 'poly'
+    };
+
+    let marker = new google.maps.Marker({
+        position: { lat: place.lat, lng: place.long },
+        map: map,
+        shape: shape,
+        title: place.restaurantName
+    });
+
+    marker.addListener('click', function () {
+        onSelectRestaurant(place);
+    });
+
+    filterRestaurantsByRates(marker, place)
+    resetFilter(marker)
+}
+
 
 function fetchData() {
     return fetch('public/restos.json', { mode: 'no-cors' })
@@ -301,19 +269,20 @@ function fetchData() {
             return res.json();
         })
         .then(restos => {
-            setMarkers(map, restos);
+            initMap()
+            return restos
+        })
+        .then(restos => {
+            for (let i = 0; i < restos.length; i++) {
+                const place = new Place(restos[i])
+                createMarker(place)
+            }
         })
         .catch(function (err) {
             console.log('Problème');
             console.log(err);
         })
 }
-
-
-
-// let placeReview = new GetInfoFromPlace(place.name, place.rating, place.reviews.text)
-
-// console.log(placeReview.toString());
 
 
 
