@@ -33,7 +33,7 @@ class Place {
     }
 
     set id(id) {
-        this._id = idd
+        this._id = id
     }
 
     get lat() {

@@ -67,42 +67,41 @@ function onRateRestaurant() {
 }
 
 // AFFICHE LES AVIS
-function displayReviews(restaurant) {
-    for (let i = 0; i < restaurant.ratings.length; i++) {
+function displayReviews(place) {
+    for (let i = 0; i < place.ratings.length; i++) {
         let createDiv = document.createElement("p");
         let createDivForStars = document.createElement("p");
         $('.restaurant-rating').append(createDiv);
-        createDiv.textContent = restaurant.ratings[i].comment;
+        createDiv.textContent = place.ratings[i].comment;
         $('.restaurant-rating').append(createDivForStars);
-        createDivForStars.textContent = "Note de l'internaute : " + restaurant.ratings[i].stars;
-
+        createDivForStars.textContent = "Note de l'internaute : " + place.ratings[i].stars;
     }
 }
 
-function getAverage(restaurant) {
+function getAverage(place) {
     let averageStars = 0;
     let array = []
-    for (let i = 0; i < restaurant.ratings.length; i++) {
-        totalStars = averageStars += restaurant.ratings[i].stars;
-        result = Math.round((totalStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
+    for (let i = 0; i < place.ratings.length; i++) {
+        totalStars = averageStars += place.ratings[i].stars;
+        result = Math.round((totalStars / place.ratings.length) * 10) / 10; // Arrondi au 10ème
         array.push(result)
     }
     return array[1]
 }
 
-function displayAverageNotationPlace(place) {
+function displayAverageNotationGooglePlace(place) {
     const $stars = $('.restaurant-stars');
     $stars.text("Average : " + place.ratings);
 }
 
 
 // AFFICHE LA MOYENNE DES ETOILES
-function displayAverageNotation(restaurant) {
+function displayAverageNotation(place) {
     let averageStars = 0;
-    for (let i = 0; i < restaurant.ratings.length; i++) {
+    for (let i = 0; i < place.ratings.length; i++) {
         const $stars = $('.restaurant-stars');
-        averageStars += parseInt(restaurant.ratings[i].stars);
-        let average = Math.round((averageStars / restaurant.ratings.length) * 10) / 10; // Arrondi au 10ème
+        averageStars += parseInt(place.ratings[i].stars);
+        let average = Math.round((averageStars / place.ratings.length) * 10) / 10; // Arrondi au 10ème
         $stars.text("Average : " + average);
     }
 }
@@ -150,7 +149,7 @@ function createRestaurant(event) {
 
         restaurantMarker.addListener('click', function () {
             $stars.text("")
-            onSelectRestaurant(restaurant);
+            onSelectRestaurant(place);
         });
     })
 }
@@ -262,7 +261,7 @@ function createMarker(place) {
     });
 
     marker.addListener('click', function () {
-        displayAverageNotationPlace(place);
+        displayAverageNotationGooglePlace(place);
         onSelectRestaurant(place);
         console.log(place)
     });
