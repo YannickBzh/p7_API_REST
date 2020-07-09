@@ -6,20 +6,20 @@ let place;
 let map;
 let infoWindow;
 
-function filterRestaurantsByRates(marker, restaurant) {
+function filterRestaurantsByRates(marker, place) {
     $("#filter-btn").click(function () {
         let filterRestaurants = $("[name=numberOfStars]");
         for (i = 0; i < filterRestaurants.length; i++) {
-            if ((filterRestaurants[0].checked) && (getAverage(restaurant) >= 2)) {
+            if ((filterRestaurants[0].checked) && (getAverage(place) >= 2)) {
                 marker.setVisible(false);
-            } if ((filterRestaurants[0].checked) && (getAverage(restaurant) < 2)) {
+            } if ((filterRestaurants[0].checked) && (getAverage(place) < 2)) {
                 marker.setVisible(true);
-            } else if ((filterRestaurants[1].checked) && ((getAverage(restaurant) >= 2) && (getAverage(restaurant) < 4))) {
+            } else if ((filterRestaurants[1].checked) && ((getAverage(place) >= 2) && (getAverage(place) < 4))) {
                 marker.setVisible(true);
             } else marker.setVisible(false);
-            if ((filterRestaurants[2].checked) && (getAverage(restaurant) >= 4)) {
+            if ((filterRestaurants[2].checked) && (getAverage(place) >= 4)) {
                 marker.setVisible(true);
-            } if ((filterRestaurants[2].checked) && (getAverage(restaurant) < 4)) {
+            } if ((filterRestaurants[2].checked) && (getAverage(place) < 4)) {
                 marker.setVisible(false);
             } return
         }
@@ -34,13 +34,13 @@ function resetFilter(marker) {
 
 
 // AFFICHE LE NOM DU RESTAURANT AU CLIC
-function onSelectRestaurant(restaurant) {
+function onSelectRestaurant(place) {
     $('.restaurant-rating').text("");
     const $restaurantName = $('.restaurant-name');
-    $restaurantName.text(restaurant.name);
-    displayAverageNotation(restaurant);
-    displayReviews(restaurant);
-    displayStreetViewImage(restaurant)
+    $restaurantName.text(place.name);
+    displayAverageNotation(place);
+    displayReviews(place);
+    displayStreetViewImage(place)
     $('#btnRate').addClass('d-block').removeClass('d-none');
     closeModal()
 }
@@ -90,6 +90,11 @@ function getAverage(restaurant) {
     return array[1]
 }
 
+function displayAverageNotationPlace(place) {
+    const $stars = $('.restaurant-stars');
+    $stars.text("Average : " + place.ratings);
+}
+
 
 // AFFICHE LA MOYENNE DES ETOILES
 function displayAverageNotation(restaurant) {
@@ -102,10 +107,10 @@ function displayAverageNotation(restaurant) {
     }
 }
 
-function displayStreetViewImage(restaurant) {
+function displayStreetViewImage(place) {
     let createDivForStreetView = document.createElement("img");
     $('.restaurant-rating').append(createDivForStreetView);
-    createDivForStreetView.src = restaurant.picture + apiKey;
+    createDivForStreetView.src = place.picture + apiKey;
 }
 
 function createRestaurant(event) {
@@ -121,31 +126,32 @@ function createRestaurant(event) {
             id: 1234,
             lat: restaurantLat,
             long: restaurantLng,
+            picture: `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${restaurantLat},${restaurantLng}&heading=151.78&pitch=-0.76&key=`,
             name: $('#name-new-restaurant').val(),
             ratings: []
         }
 
         // À voir si ça sert à quelque chose ?
-        // restaurants.push(restaurant);
+        //restaurants.push(restaurant);
         const place = new Place(restaurant)
 
 
-        // $('#add-restaurant').unbind("click")
-        // $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
-        // $('#name-new-restaurant').val("");
-        // $('#address-new-restaurant').val("");
+        $('#add-restaurant').unbind("click")
+        $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
+        $('#name-new-restaurant').val("");
+        $('#address-new-restaurant').val("");
 
-        // const restaurantMarker = new google.maps.Marker({
-        //     position: event.latLng,
-        //     map: map,
-        //     title: 'New marker',
-        //     draggable: true,
-        // });
+        const restaurantMarker = new google.maps.Marker({
+            position: event.latLng,
+            map: map,
+            title: 'New marker',
+            draggable: true,
+        });
 
-        // restaurantMarker.addListener('click', function () {
-        //     $stars.text("")
-        //     onSelectRestaurant(restaurant);
-        // });
+        restaurantMarker.addListener('click', function () {
+            $stars.text("")
+            onSelectRestaurant(restaurant);
+        });
     })
 }
 
@@ -195,17 +201,18 @@ function getNearByPlaces(pos) {
     request = {
         location: pos,
         type: "restaurant",
-        radius: '2000'
+        radius: '4000'
     };
 
     let service = new google.maps.places.PlacesService(map);
 
     service.nearbySearch(request, function (results, status) {
+        //console.log(results)
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (let i = 0; i < results.length; i++) {
-                const adaptedPlace = placeAdapter(results[i])
-                const place = new Place(adaptedPlace)
-                createMarker(place)
+                const adaptedPlace = placeAdapter(results[i]);
+                const place = new Place(adaptedPlace);
+                createMarker(place);
             }
         };
     });
@@ -223,7 +230,7 @@ function getRatingByPlaceId(placeId) {
     function callback(place, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             console.log("====")
-            // console.log(place.reviews[0].text)
+            //console.log(place.reviews[0].text)
             // console.log("====")
             console.log(place)
         } else {
@@ -255,7 +262,9 @@ function createMarker(place) {
     });
 
     marker.addListener('click', function () {
+        displayAverageNotationPlace(place);
         onSelectRestaurant(place);
+        console.log(place)
     });
 
     filterRestaurantsByRates(marker, place)

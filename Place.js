@@ -5,7 +5,7 @@ const placeAdapter = googlePlace => {
         lat: googlePlace.geometry.location.lat(),
         long: googlePlace.geometry.location.lng(),
         name: googlePlace.name,
-        ratings: googlePlace.rating
+        ratings: googlePlace.rating,
     }
 }
 
