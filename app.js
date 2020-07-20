@@ -89,20 +89,18 @@ function getAverage(place) {
     return array[1]
 }
 
-function displayAverageNotationGooglePlace(place) {
-    const $stars = $('.restaurant-stars');
-    $stars.text("Average : " + place.ratings);
-}
-
-
-// AFFICHE LA MOYENNE DES ETOILES
 function displayAverageNotation(place) {
     let averageStars = 0;
-    for (let i = 0; i < place.ratings.length; i++) {
+    if (place.ratings <= 5) {
         const $stars = $('.restaurant-stars');
-        averageStars += parseInt(place.ratings[i].stars);
-        let average = Math.round((averageStars / place.ratings.length) * 10) / 10; // Arrondi au 10ème
-        $stars.text("Average : " + average);
+        $stars.text("Average : " + place.ratings);
+    } else {
+        for (let i = 0; i < place.ratings.length; i++) {
+            const $stars = $('.restaurant-stars');
+            averageStars += parseInt(place.ratings[i].stars);
+            let average = Math.round((averageStars / place.ratings.length) * 10) / 10; // Arrondi au 10ème
+            $stars.text("Average : " + average);
+        }
     }
 }
 
@@ -125,7 +123,7 @@ function createRestaurant(event) {
             id: 1234,
             lat: restaurantLat,
             long: restaurantLng,
-            picture: `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${restaurantLat},${restaurantLng}&heading=151.78&pitch=-0.76&key=`,
+            //picture: `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${restaurantLat},${restaurantLng}&heading=151.78&pitch=-0.76&key=`,
             name: $('#name-new-restaurant').val(),
             ratings: []
         }
@@ -135,22 +133,22 @@ function createRestaurant(event) {
         const place = new Place(restaurant)
 
 
-        $('#add-restaurant').unbind("click")
-        $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
-        $('#name-new-restaurant').val("");
-        $('#address-new-restaurant').val("");
+        // $('#add-restaurant').unbind("click")
+        // $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
+        // $('#name-new-restaurant').val("");
+        // $('#address-new-restaurant').val("");
 
-        const restaurantMarker = new google.maps.Marker({
-            position: event.latLng,
-            map: map,
-            title: 'New marker',
-            draggable: true,
-        });
+        // const restaurantMarker = new google.maps.Marker({
+        //     position: event.latLng,
+        //     map: map,
+        //     title: 'New marker',
+        //     draggable: true,
+        // });
 
-        restaurantMarker.addListener('click', function () {
-            $stars.text("")
-            onSelectRestaurant(place);
-        });
+        // restaurantMarker.addListener('click', function () {
+        //     $stars.text("")
+        //     onSelectRestaurant(place);
+        // });
     })
 }
 
@@ -261,7 +259,7 @@ function createMarker(place) {
     });
 
     marker.addListener('click', function () {
-        displayAverageNotationGooglePlace(place);
+        displayAverageNotation(place);
         onSelectRestaurant(place);
         console.log(place)
     });
