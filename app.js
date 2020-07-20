@@ -34,15 +34,49 @@ function resetFilter(marker) {
 
 
 // AFFICHE LE NOM DU RESTAURANT AU CLIC
-function onSelectRestaurant(place) {
+function onSelectRestaurant(restaurant) {
+    let reviews = []
+
+    if (restaurant.type === "googlePlace") {
+        const request = {
+            placeId: restaurant.placeId
+        };
+          
+        service = new google.maps.places.PlacesService(map);
+        service.getDetails(request, function(place, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                // console.log(place.reviews)
+                // reviewAdapter(place.reviews)
+                reviews = place.reviews.map(review => reviewAdapter(review))
+                displayRestaurantDetails(restaurant, reviews)
+            }
+        });
+        
+    } else {
+        displayRestaurantDetails(restaurant, restaurant.ratings)
+    }
+}
+
+function displayRestaurantDetails(restaurant, reviews) {
     $('.restaurant-rating').text("");
     const $restaurantName = $('.restaurant-name');
-    $restaurantName.text(place.name);
-    displayAverageNotation(place);
-    displayReviews(place);
-    displayStreetViewImage(place)
+    $restaurantName.text(restaurant.name);
+    displayRestaurantReviews(reviews);
+    displayStreetViewImage(restaurant);
     $('#btnRate').addClass('d-block').removeClass('d-none');
     closeModal()
+}
+
+// // AFFICHE LES AVIS
+function displayRestaurantReviews(reviews) {
+    for (let i = 0; i < reviews.length; i++) {
+        let createDiv = document.createElement("p");
+        let createDivForStars = document.createElement("p");
+        $('.restaurant-rating').append(createDiv);
+        createDiv.textContent = reviews[i].comment;
+        $('.restaurant-rating').append(createDivForStars);
+        createDivForStars.textContent = "Note de l'internaute : " + reviews[i].stars;
+    }
 }
 
 // AJOUTER UN AVIS
@@ -66,27 +100,21 @@ function onRateRestaurant() {
     closeModal()
 }
 
-// AFFICHE LES AVIS
-function displayReviews(place) {
-    for (let i = 0; i < place.ratings.length; i++) {
-        let createDiv = document.createElement("p");
-        let createDivForStars = document.createElement("p");
-        $('.restaurant-rating').append(createDiv);
-        createDiv.textContent = place.ratings[i].comment;
-        $('.restaurant-rating').append(createDivForStars);
-        createDivForStars.textContent = "Note de l'internaute : " + place.ratings[i].stars;
-    }
-}
-
 function getAverage(place) {
-    let averageStars = 0;
-    let array = []
-    for (let i = 0; i < place.ratings.length; i++) {
-        totalStars = averageStars += place.ratings[i].stars;
-        result = Math.round((totalStars / place.ratings.length) * 10) / 10; // Arrondi au 10ème
-        array.push(result)
+
+    // C'est schlague -> clean ça
+    if (place.type === 'customPlace') {
+        let averageStars = 0;
+        let array = []
+        for (let i = 0; i < place.ratings.length; i++) {
+            totalStars = averageStars += place.ratings[i].stars;
+            result = Math.round((totalStars / place.ratings.length) * 10) / 10; // Arrondi au 10ème
+            array.push(result)
+        }
+        return array[1]
+    } else {
+        return [place.ratings]
     }
-    return array[1]
 }
 
 function displayAverageNotation(place) {
@@ -118,37 +146,34 @@ function createRestaurant(event) {
     const restaurantLng = event.latLng.lng();
 
     $addRestaurantBtn.click(function () {
-        const restaurant = {
+
+        const restaurantData = {
             address: $('#address-new-restaurant').val(),
-            id: 1234,
+            // à voir pour faire une méthode qui incrémente par rapport au resto.json
+            id: 1000,
             lat: restaurantLat,
             long: restaurantLng,
-            //picture: `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${restaurantLat},${restaurantLng}&heading=151.78&pitch=-0.76&key=`,
             name: $('#name-new-restaurant').val(),
-            ratings: []
+            type: 'customPlace'
         }
-
-        // À voir si ça sert à quelque chose ?
-        //restaurants.push(restaurant);
-        const place = new Place(restaurant)
+        const place = new Place(restaurantData)
 
 
-        // $('#add-restaurant').unbind("click")
-        // $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
-        // $('#name-new-restaurant').val("");
-        // $('#address-new-restaurant').val("");
+        $('#add-restaurant').unbind("click")
+        $('#modal-new-restaurant').addClass('d-none').removeClass('d-block');
+        $('#name-new-restaurant').val("");
+        $('#address-new-restaurant').val("");
 
-        // const restaurantMarker = new google.maps.Marker({
-        //     position: event.latLng,
-        //     map: map,
-        //     title: 'New marker',
-        //     draggable: true,
-        // });
+        const restaurantMarker = new google.maps.Marker({
+            position: event.latLng,
+            map: map,
+            title: place.name
+        });
 
-        // restaurantMarker.addListener('click', function () {
-        //     $stars.text("")
-        //     onSelectRestaurant(place);
-        // });
+        restaurantMarker.addListener('click', function () {
+            $stars.text("")
+            onSelectRestaurant(place);
+        });
     })
 }
 
@@ -204,7 +229,6 @@ function getNearByPlaces(pos) {
     let service = new google.maps.places.PlacesService(map);
 
     service.nearbySearch(request, function (results, status) {
-        //console.log(results)
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (let i = 0; i < results.length; i++) {
                 const adaptedPlace = placeAdapter(results[i]);
@@ -213,27 +237,6 @@ function getNearByPlaces(pos) {
             }
         };
     });
-}
-
-function getRatingByPlaceId(placeId) {
-    const request = {
-        placeId: placeId,
-        fields: ['name', 'rating', 'geometry', 'review']
-    };
-
-    service = new google.maps.places.PlacesService(map);
-    service.getDetails(request, callback);
-
-    function callback(place, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-            console.log("====")
-            //console.log(place.reviews[0].text)
-            // console.log("====")
-            console.log(place)
-        } else {
-            console.log("+++++")
-        }
-    }
 }
 
 
@@ -261,7 +264,6 @@ function createMarker(place) {
     marker.addListener('click', function () {
         displayAverageNotation(place);
         onSelectRestaurant(place);
-        console.log(place)
     });
 
     filterRestaurantsByRates(marker, place)
