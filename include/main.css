@@ -36,6 +36,10 @@ img {
     padding:5%;
 }
 
+.border{
+    border: 2px solid blue;
+}
+
 /* .displayRatings {
     height:100px;
     width:100%;
