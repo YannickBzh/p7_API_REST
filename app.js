@@ -36,9 +36,7 @@ function resetFilter(marker) {
 // AFFICHE LE NOM DU RESTAURANT AU CLIC
 function onSelectRestaurant(restaurant) {
     let reviews = []
-    console.log("++++++")
-    console.log(restaurant)
-    console.log("++++++")
+
     if (restaurant.type === "googlePlace") {
         const request = {
             placeId: restaurant.placeId
@@ -56,6 +54,10 @@ function onSelectRestaurant(restaurant) {
 
     } else {
         displayRestaurantDetails(restaurant, restaurant.ratings)
+
+        $('#saveRateBtn').click(function () {
+            onRateRestaurant(restaurant);
+        })
     }
 }
 
@@ -82,20 +84,21 @@ function displayRestaurantReviews(reviews) {
 }
 
 // AJOUTER UN AVIS
-function onRateRestaurant() {
+function onRateRestaurant(restaurant) {
     const restaurantName = $('.restaurant-name').text();
-    //const selectedRestaurant = restaurants.filter(resto => resto.name === restaurantName)[0];
-    const selectedRestaurant = restos.filter(function (resto) {
-        if (resto.name === restaurantName) {
-            return resto.name
-        }
-    })
+    // //const selectedRestaurant = restaurants.filter(resto => resto.name === restaurantName)[0];
+    // const selectedRestaurant = restos.filter(function (resto) {
+    //     if (resto.name === restaurantName) {
+    //         return resto.name
+    //     }
+    // })
+
     const $starsValue = $("#select-stars");
     let newRating = {
         "stars": parseInt($starsValue.val()),
         "comment": $('#review').val(),
     };
-    selectedRestaurant.ratings.push(newRating);
+    restaurant.ratings.push(newRating);
     $('#review').val("");
     let createDiv = document.createElement("p");
     let createDivForStars = document.createElement("p");
@@ -103,7 +106,7 @@ function onRateRestaurant() {
     createDivForStars.textContent = "Note de l'internaute : " + newRating.stars;
     $('.restaurant-rating').prepend(createDiv);
     createDiv.textContent = newRating.comment;
-    displayAverageNotation(selectedRestaurant);
+    displayAverageNotation(restaurant);
     closeModal();
 }
 
@@ -314,10 +317,6 @@ $('#close-modal-new-restaurant').click(function () {
 
 $('#btnRate').click(function () {
     $('#modalRate').addClass('d-block').removeClass('d-none');
-})
-
-$('#saveRateBtn').click(function () {
-    onRateRestaurant();
 })
 
 $(document).ready(function () {
