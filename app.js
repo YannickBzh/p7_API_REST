@@ -282,10 +282,9 @@ function createMarker(place) {
 
 
 function fetchData() {
-    return fetch('public/restos.json', { mode: 'no-cors' })
-        .then(res => {
-            return res.json();
-        })
+    const apiService = new APIService('public/restos.json')
+    
+    apiService.fetchData()
         .then(restos => {
             initMap()
             return restos
@@ -295,10 +294,6 @@ function fetchData() {
                 const place = new Place(restos[i])
                 createMarker(place)
             }
-        })
-        .catch(function (err) {
-            console.log('Problème');
-            console.log(err);
         })
 }
 
