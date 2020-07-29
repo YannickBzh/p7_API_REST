@@ -85,14 +85,6 @@ function displayRestaurantReviews(reviews) {
 
 // AJOUTER UN AVIS
 function onRateRestaurant(restaurant) {
-    const restaurantName = $('.restaurant-name').text();
-    // //const selectedRestaurant = restaurants.filter(resto => resto.name === restaurantName)[0];
-    // const selectedRestaurant = restos.filter(function (resto) {
-    //     if (resto.name === restaurantName) {
-    //         return resto.name
-    //     }
-    // })
-
     const $starsValue = $("#select-stars");
     let newRating = {
         "stars": parseInt($starsValue.val()),
